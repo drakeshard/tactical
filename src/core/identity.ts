@@ -27,10 +27,7 @@ export function locationId(value: string): LocationId {
   return value as LocationId;
 }
 
-export function tacticalEntityIdsEqual(
-  left: TacticalEntityId,
-  right: TacticalEntityId,
-): boolean {
+export function tacticalEntityIdsEqual(left: TacticalEntityId, right: TacticalEntityId): boolean {
   return left === right;
 }
 
