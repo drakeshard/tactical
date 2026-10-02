@@ -1,17 +1,14 @@
 import type { LocationId } from "../core/identity.js";
+import { type SquareRelativeDirection, squareRelativeDirection } from "../square/queries.js";
 import {
-  squareRelativeDirection,
-  type SquareRelativeDirection,
-} from "../square/queries.js";
-import {
-  squareLocationId,
   type SquareCoord,
   type SquareDirection,
   type SquareTopologyDefinition,
+  squareLocationId,
 } from "../square/topology.js";
 import {
-  squareLineOfSight,
   type SquareLineOfSightObservation,
+  squareLineOfSight,
   type VisionBlocker,
 } from "../visibility/square-los.js";
 
