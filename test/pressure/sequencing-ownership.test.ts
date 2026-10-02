@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { locationId, tacticalEntityId, type TacticalEntityId } from "../../src/core/identity.js";
+import { locationId, type TacticalEntityId, tacticalEntityId } from "../../src/core/identity.js";
 import { emptyPlacementState, placeEntity } from "../../src/placement/placement.js";
 import type { Topology } from "../../src/space/topology.js";
 
