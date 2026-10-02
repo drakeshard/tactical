@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { locationId } from "../../src/core/identity.js";
-import {
-  squareLineOfSight,
-  squareLineTrace,
-} from "../../src/visibility/square-los.js";
+import { squareLineOfSight, squareLineTrace } from "../../src/visibility/square-los.js";
 
 const definition = {
   bounds: { minX: 0, maxX: 5, minY: 0, maxY: 5 },
@@ -72,11 +69,7 @@ describe("logical square line of sight", () => {
       kind: "observed",
       observation: {
         visible: true,
-        trace: [
-          locationId("square:0,0"),
-          locationId("square:1,0"),
-          locationId("square:2,0"),
-        ],
+        trace: [locationId("square:0,0"), locationId("square:1,0"), locationId("square:2,0")],
       },
     });
   });
