@@ -9,21 +9,21 @@ import {
   tacticalEntityId,
 } from "../../src/core/identity.js";
 import {
+  type ElevationState,
   elevationAt,
   emptyElevationState,
   setElevation,
-  type ElevationState,
 } from "../../src/elevation/elevation.js";
 import {
   emptyPlacementState,
   locationsOf,
-  placeEntity,
   type PlacementState,
+  placeEntity,
 } from "../../src/placement/placement.js";
 import {
   createSquareTopology,
-  squareLocationId,
   type SquareTopologyDefinition,
+  squareLocationId,
 } from "../../src/square/topology.js";
 
 interface TacticalSnapshot {
@@ -53,12 +53,9 @@ describe("Tactical serialization/persistence pressure", () => {
     if (!topology) throw new Error("fixture topology invalid");
 
     const entity = tacticalEntityId("external:scout");
-    const placed = placeEntity(
-      emptyPlacementState(),
-      topology,
-      entity,
-      [squareLocationId({ x: 1, y: 1 })],
-    );
+    const placed = placeEntity(emptyPlacementState(), topology, entity, [
+      squareLocationId({ x: 1, y: 1 }),
+    ]);
     if (placed.kind !== "placed") throw new Error("fixture placement failed");
 
     const raised = setElevation(
