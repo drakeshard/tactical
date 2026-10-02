@@ -1,9 +1,6 @@
 import type { LocationId } from "../core/identity.js";
 import type { Topology } from "../space/topology.js";
-import {
-  traversalTransitions,
-  type TraversalPolicy,
-} from "../traversal/traversal.js";
+import { type TraversalPolicy, traversalTransitions } from "../traversal/traversal.js";
 
 export interface ReachableLocation {
   readonly location: LocationId;
