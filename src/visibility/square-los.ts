@@ -1,9 +1,9 @@
 import type { LocationId } from "../core/identity.js";
 import {
-  squareContains,
-  squareLocationId,
   type SquareCoord,
   type SquareTopologyDefinition,
+  squareContains,
+  squareLocationId,
 } from "../square/topology.js";
 
 export interface SquareLineOfSightObservation {
