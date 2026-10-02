@@ -3,11 +3,7 @@ import { describe, expect, it } from "vitest";
 import { tacticalEntityId } from "../../src/core/identity.js";
 import { observeSquareCover } from "../../src/cover/square-cover.js";
 import { displaceEntity } from "../../src/displacement/displacement.js";
-import {
-  elevationAt,
-  emptyElevationState,
-  setElevation,
-} from "../../src/elevation/elevation.js";
+import { elevationAt, emptyElevationState, setElevation } from "../../src/elevation/elevation.js";
 import { lowestCostPath } from "../../src/movement/pathfinding.js";
 import { reachableLocations } from "../../src/movement/reachability.js";
 import {
@@ -19,8 +15,8 @@ import {
 import { squareDistance, squareLocationsWithinRadius } from "../../src/square/queries.js";
 import {
   createSquareTopology,
-  squareLocationId,
   type SquareTopologyDefinition,
+  squareLocationId,
 } from "../../src/square/topology.js";
 import type { TraversalPolicy } from "../../src/traversal/traversal.js";
 import { squareLineOfSight } from "../../src/visibility/square-los.js";
@@ -69,24 +65,14 @@ function runScenario() {
   const traversal: TraversalPolicy = (_from, to) =>
     occupantsAt(occupied.state, to).length === 0 ? 1 : undefined;
 
-  const reachable = reachableLocations(
-    topology,
-    squareLocationId({ x: 0, y: 0 }),
-    3,
-    traversal,
-  );
+  const reachable = reachableLocations(topology, squareLocationId({ x: 0, y: 0 }), 3, traversal);
   const path = lowestCostPath(
     topology,
     squareLocationId({ x: 0, y: 0 }),
     squareLocationId({ x: 4, y: 0 }),
     traversal,
   );
-  const radius = squareLocationsWithinRadius(
-    definition,
-    { x: 2, y: 2 },
-    2,
-    "chebyshev",
-  );
+  const radius = squareLocationsWithinRadius(definition, { x: 2, y: 2 }, 2, "chebyshev");
   const lineOfSight = squareLineOfSight(
     definition,
     { x: 0, y: 0 },
@@ -98,8 +84,7 @@ function runScenario() {
     { x: 0, y: 0 },
     { x: 1, y: 0 },
     () => false,
-    (target, direction) =>
-      target === squareLocationId({ x: 1, y: 0 }) && direction === "west",
+    (target, direction) => target === squareLocationId({ x: 1, y: 0 }) && direction === "west",
   );
   const displacement = displaceEntity(
     occupied.state,
