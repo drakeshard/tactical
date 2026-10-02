@@ -37,7 +37,11 @@ export function findPackageInvariantViolations({ root = process.cwd() } = {}) {
   if (packageJson.license !== "Apache-2.0") {
     violations.push('package.json: "license" must be "Apache-2.0"');
   }
-  if (!Array.isArray(packageJson.files) || packageJson.files.length !== 1 || packageJson.files[0] !== "dist") {
+  if (
+    !Array.isArray(packageJson.files) ||
+    packageJson.files.length !== 1 ||
+    packageJson.files[0] !== "dist"
+  ) {
     violations.push('package.json: "files" must remain exactly ["dist"] during incubation');
   }
 
@@ -50,7 +54,9 @@ export function findPackageInvariantViolations({ root = process.cwd() } = {}) {
   }
 
   if (packageJson.exports !== undefined) {
-    violations.push('package.json: "exports" must remain absent until controlled public-surface admission');
+    violations.push(
+      'package.json: "exports" must remain absent until controlled public-surface admission',
+    );
   }
   for (const field of ["main", "module", "types", "typings"]) {
     if (packageJson[field] !== undefined) {
