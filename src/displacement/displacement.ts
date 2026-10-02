@@ -1,10 +1,10 @@
 import type { LocationId, TacticalEntityId } from "../core/identity.js";
 import {
   locationsOf,
-  relocateEntity,
   type PlacementPolicy,
   type PlacementRejected,
   type PlacementState,
+  relocateEntity,
 } from "../placement/placement.js";
 import type { Topology } from "../space/topology.js";
 
