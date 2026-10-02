@@ -20,8 +20,8 @@ import {
 import { squareDistance, squareLocationsWithinRadius } from "../../src/square/queries.js";
 import {
   createSquareTopology,
-  squareLocationId,
   type SquareTopologyDefinition,
+  squareLocationId,
 } from "../../src/square/topology.js";
 import type { TraversalPolicy } from "../../src/traversal/traversal.js";
 import { squareLineOfSight } from "../../src/visibility/square-los.js";
@@ -86,12 +86,7 @@ describe("headless Tactical composition pressure", () => {
       return delta > 0 ? 2 : 1;
     };
 
-    const reachable = reachableLocations(
-      topology,
-      squareLocationId({ x: 0, y: 0 }),
-      4,
-      traversal,
-    );
+    const reachable = reachableLocations(topology, squareLocationId({ x: 0, y: 0 }), 4, traversal);
     expect(reachable.kind).toBe("reachable");
 
     const path = lowestCostPath(
@@ -113,13 +108,11 @@ describe("headless Tactical composition pressure", () => {
       },
     });
 
-    expect(
-      squareDistance({ x: 0, y: 0 }, { x: 3, y: 0 }, "manhattan"),
-    ).toBe(3);
+    expect(squareDistance({ x: 0, y: 0 }, { x: 3, y: 0 }, "manhattan")).toBe(3);
 
-    expect(
-      squareLocationsWithinRadius(definition, { x: 1, y: 1 }, 1, "chebyshev"),
-    ).toMatchObject({ kind: "locations" });
+    expect(squareLocationsWithinRadius(definition, { x: 1, y: 1 }, 1, "chebyshev")).toMatchObject({
+      kind: "locations",
+    });
 
     expect(
       squareLineOfSight(
@@ -142,8 +135,7 @@ describe("headless Tactical composition pressure", () => {
         { x: 0, y: 0 },
         { x: 1, y: 0 },
         () => false,
-        (target, direction) =>
-          target === squareLocationId({ x: 1, y: 0 }) && direction === "west",
+        (target, direction) => target === squareLocationId({ x: 1, y: 0 }) && direction === "west",
       ),
     ).toMatchObject({
       kind: "observed",
