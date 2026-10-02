@@ -155,10 +155,7 @@ export function relocateEntity(
   };
 }
 
-export function removeEntity(
-  state: PlacementState,
-  entity: TacticalEntityId,
-): PlacementResult {
+export function removeEntity(state: PlacementState, entity: TacticalEntityId): PlacementResult {
   if (locationsOf(state, entity) === undefined) {
     return { kind: "rejected", reason: { kind: "entity-not-placed", entity } };
   }
