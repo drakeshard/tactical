@@ -1,4 +1,4 @@
-import { locationId, type LocationId } from "../core/identity.js";
+import { type LocationId, locationId } from "../core/identity.js";
 import type { Topology } from "../space/topology.js";
 
 export interface SquareCoord {
