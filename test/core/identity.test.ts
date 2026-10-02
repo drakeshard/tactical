@@ -3,14 +3,14 @@ import { describe, expect, expectTypeOf, it } from "vitest";
 import {
   deserializeLocationId,
   deserializeTacticalEntityId,
+  type LocationId,
   locationId,
   locationIdsEqual,
   serializeLocationId,
   serializeTacticalEntityId,
+  type TacticalEntityId,
   tacticalEntityId,
   tacticalEntityIdsEqual,
-  type LocationId,
-  type TacticalEntityId,
 } from "../../src/core/identity.js";
 
 describe("Tactical identity contracts", () => {
@@ -32,12 +32,12 @@ describe("Tactical identity contracts", () => {
   });
 
   it("compares identities by their exact opaque representation", () => {
-    expect(
-      tacticalEntityIdsEqual(tacticalEntityId("entity-a"), tacticalEntityId("entity-a")),
-    ).toBe(true);
-    expect(
-      tacticalEntityIdsEqual(tacticalEntityId("entity-a"), tacticalEntityId("entity-b")),
-    ).toBe(false);
+    expect(tacticalEntityIdsEqual(tacticalEntityId("entity-a"), tacticalEntityId("entity-a"))).toBe(
+      true,
+    );
+    expect(tacticalEntityIdsEqual(tacticalEntityId("entity-a"), tacticalEntityId("entity-b"))).toBe(
+      false,
+    );
     expect(locationIdsEqual(locationId("location-a"), locationId("location-a"))).toBe(true);
     expect(locationIdsEqual(locationId("location-a"), locationId("location-b"))).toBe(false);
   });
