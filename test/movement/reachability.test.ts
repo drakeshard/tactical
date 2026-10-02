@@ -84,9 +84,7 @@ describe("reachability", () => {
   });
 
   it("propagates invalid traversal costs explicitly", () => {
-    expect(
-      reachableLocations(topology(), locationId("start"), 2, () => Number.NaN),
-    ).toEqual({
+    expect(reachableLocations(topology(), locationId("start"), 2, () => Number.NaN)).toEqual({
       kind: "invalid-transition-cost",
       from: locationId("start"),
       to: locationId("north"),
