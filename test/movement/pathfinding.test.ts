@@ -80,11 +80,15 @@ describe("pathfinding", () => {
   });
 
   it("reports unknown endpoints explicitly", () => {
-    expect(lowestCostPath(topology(), locationId("missing"), locationId("goal"), policy())).toEqual({
-      kind: "unknown-location",
-      location: locationId("missing"),
-    });
-    expect(lowestCostPath(topology(), locationId("start"), locationId("missing"), policy())).toEqual({
+    expect(lowestCostPath(topology(), locationId("missing"), locationId("goal"), policy())).toEqual(
+      {
+        kind: "unknown-location",
+        location: locationId("missing"),
+      },
+    );
+    expect(
+      lowestCostPath(topology(), locationId("start"), locationId("missing"), policy()),
+    ).toEqual({
       kind: "unknown-location",
       location: locationId("missing"),
     });
