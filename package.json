@@ -22,7 +22,8 @@
     "typecheck:test": "tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run --passWithNoTests",
     "build": "tsc",
-    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm check:build"
+    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm check:build && pnpm performance:pressure",
+    "performance:pressure": "node scripts/performance-pressure.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
