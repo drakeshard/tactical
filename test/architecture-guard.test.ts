@@ -20,7 +20,7 @@ function fixture(source) {
 
 describe("Tactical architecture guard", () => {
   it("allows renderer-neutral relative source", () => {
-    const root = fixture('export const value = 1;\n');
+    const root = fixture("export const value = 1;\n");
     expect(findArchitectureViolations({ root })).toEqual([]);
   });
 
@@ -29,12 +29,12 @@ describe("Tactical architecture guard", () => {
     ['import { x } from "phaser";', "external package"],
     ['import { x } from "playcanvas";', "external package"],
     ['import { x } from "preact";', "external package"],
-    ['const x = Math.random();', "Math.random"],
-    ['const x = Date.now();', "Date.now"],
-    ['const x = performance.now();', "performance.now"],
-    ['setTimeout(() => {}, 1);', "setTimeout"],
-    ['window.location.href;', "window"],
-    ['document.body;', "document"],
+    ["const x = Math.random();", "Math.random"],
+    ["const x = Date.now();", "Date.now"],
+    ["const x = performance.now();", "performance.now"],
+    ["setTimeout(() => {}, 1);", "setTimeout"],
+    ["window.location.href;", "window"],
+    ["document.body;", "document"],
   ])("rejects %s", (source, expected) => {
     const root = fixture(source);
     expect(findArchitectureViolations({ root }).join("\n")).toContain(expected);
