@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { locationId } from "../../src/core/identity.js";
 import type { Topology } from "../../src/space/topology.js";
-import { traversalTransitions, type TraversalPolicy } from "../../src/traversal/traversal.js";
+import { type TraversalPolicy, traversalTransitions } from "../../src/traversal/traversal.js";
 
 function topology(): Topology {
   const relationships = new Map([
