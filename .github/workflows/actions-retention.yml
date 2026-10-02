@@ -75,8 +75,22 @@ jobs:
               return
             fi
 
-            gh api --method DELETE "repos/${GH_REPO}/actions/runs/${run_id}"
-            echo "deleted run ${run_id}"
+            delete_error_file="$(mktemp)"
+            if gh api --method DELETE "repos/${GH_REPO}/actions/runs/${run_id}" 2>"${delete_error_file}"; then
+              rm -f "${delete_error_file}"
+              echo "deleted run ${run_id}"
+              return
+            fi
+
+            if grep -q "HTTP 404" "${delete_error_file}"; then
+              echo "already absent: run ${run_id}"
+              rm -f "${delete_error_file}"
+              return
+            fi
+
+            cat "${delete_error_file}" >&2
+            rm -f "${delete_error_file}"
+            return 1
           }
 
           cleanup_branch() {
