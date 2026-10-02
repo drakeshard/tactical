@@ -27,12 +27,10 @@ function topology(): Topology {
 describe("placement and occupancy", () => {
   it("places an entity across one or more logical locations", () => {
     const entity = tacticalEntityId("large-entity");
-    const result = placeEntity(
-      emptyPlacementState(),
-      topology(),
-      entity,
-      [locationId("a"), locationId("b")],
-    );
+    const result = placeEntity(emptyPlacementState(), topology(), entity, [
+      locationId("a"),
+      locationId("b"),
+    ]);
 
     expect(result.kind).toBe("placed");
     if (result.kind !== "placed") return;
@@ -59,9 +57,7 @@ describe("placement and occupancy", () => {
     if (initial.kind !== "placed") throw new Error("fixture placement failed");
 
     expect(
-      placeEntity(initial.state, topology(), second, [locationId("a")], [
-        exclusiveOccupancyPolicy,
-      ]),
+      placeEntity(initial.state, topology(), second, [locationId("a")], [exclusiveOccupancyPolicy]),
     ).toEqual({
       kind: "rejected",
       reason: {
@@ -79,20 +75,17 @@ describe("placement and occupancy", () => {
       reason: { kind: "empty-location-set", entity },
     });
     expect(
-      placeEntity(emptyPlacementState(), topology(), entity, [
-        locationId("a"),
-        locationId("a"),
-      ]),
+      placeEntity(emptyPlacementState(), topology(), entity, [locationId("a"), locationId("a")]),
     ).toEqual({
       kind: "rejected",
       reason: { kind: "duplicate-location", location: locationId("a") },
     });
-    expect(
-      placeEntity(emptyPlacementState(), topology(), entity, [locationId("missing")]),
-    ).toEqual({
-      kind: "rejected",
-      reason: { kind: "unknown-location", location: locationId("missing") },
-    });
+    expect(placeEntity(emptyPlacementState(), topology(), entity, [locationId("missing")])).toEqual(
+      {
+        kind: "rejected",
+        reason: { kind: "unknown-location", location: locationId("missing") },
+      },
+    );
   });
 
   it("relocates and removes without mutating the previous state", () => {
@@ -114,12 +107,10 @@ describe("placement and occupancy", () => {
 
   it("round-trips placement state through JSON", () => {
     const entity = tacticalEntityId("entity");
-    const placed = placeEntity(
-      emptyPlacementState(),
-      topology(),
-      entity,
-      [locationId("a"), locationId("b")],
-    );
+    const placed = placeEntity(emptyPlacementState(), topology(), entity, [
+      locationId("a"),
+      locationId("b"),
+    ]);
     if (placed.kind !== "placed") throw new Error("fixture placement failed");
 
     expect(JSON.parse(JSON.stringify(placed.state))).toEqual(placed.state);
