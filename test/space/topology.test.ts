@@ -1,11 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { locationId } from "../../src/core/identity.js";
-import {
-  topologyHasLocation,
-  topologyNeighbors,
-  type Topology,
-} from "../../src/space/topology.js";
+import { type Topology, topologyHasLocation, topologyNeighbors } from "../../src/space/topology.js";
 
 function fixture(): Topology {
   const alpha = locationId("alpha");
