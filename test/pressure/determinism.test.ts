@@ -52,18 +52,8 @@ describe("Tactical determinism review", () => {
       squareLocationId({ x: 2, y: 1 }),
       policy,
     );
-    const reachableA = reachableLocations(
-      topology,
-      squareLocationId({ x: 0, y: 0 }),
-      2,
-      policy,
-    );
-    const reachableB = reachableLocations(
-      topology,
-      squareLocationId({ x: 0, y: 0 }),
-      2,
-      policy,
-    );
+    const reachableA = reachableLocations(topology, squareLocationId({ x: 0, y: 0 }), 2, policy);
+    const reachableB = reachableLocations(topology, squareLocationId({ x: 0, y: 0 }), 2, policy);
 
     expect(pathA).toEqual(pathB);
     expect(pathA).toEqual({
