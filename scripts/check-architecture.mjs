@@ -3,13 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const sourceExtensions = new Set([".ts", ".tsx", ".js", ".jsx", ".mts", ".cts"]);
-const forbiddenRelativeSegments = new Set([
-  "browser",
-  "presentation",
-  "renderer",
-  "rpg",
-  "ui",
-]);
+const forbiddenRelativeSegments = new Set(["browser", "presentation", "renderer", "rpg", "ui"]);
 
 const forbiddenRuntimePatterns = [
   ["uncontrolled randomness via Math.random()", /\bMath\.random\s*\(/g],
