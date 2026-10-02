@@ -6,9 +6,7 @@ const root = process.cwd();
 
 describe("Tactical v0.1 extraction decision", () => {
   it("keeps the package private with zero admitted stable gameplay exports", () => {
-    const packageJson = JSON.parse(
-      fs.readFileSync(path.join(root, "package.json"), "utf8"),
-    );
+    const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
     const rootSource = fs.readFileSync(path.join(root, "src", "index.ts"), "utf8");
 
     expect(packageJson.private).toBe(true);
