@@ -1,12 +1,12 @@
 import type { LocationId } from "../core/identity.js";
 import {
+  type SquareCoord,
+  type SquareDirection,
+  type SquareTopologyDefinition,
   squareChebyshevDistance,
   squareContains,
   squareLocationId,
   squareManhattanDistance,
-  type SquareCoord,
-  type SquareDirection,
-  type SquareTopologyDefinition,
 } from "./topology.js";
 
 export type SquareDistanceMetric = "manhattan" | "chebyshev";
