@@ -2,10 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { locationId } from "../../src/core/identity.js";
 import type { Topology } from "../../src/space/topology.js";
-import {
-  traversalTransitions,
-  type TraversalPolicy,
-} from "../../src/traversal/traversal.js";
+import { traversalTransitions, type TraversalPolicy } from "../../src/traversal/traversal.js";
 
 function topology(): Topology {
   const relationships = new Map([
@@ -92,9 +89,7 @@ describe("traversal", () => {
   });
 
   it("rejects invalid policy costs explicitly", () => {
-    expect(
-      traversalTransitions(topology(), locationId("ground"), () => Number.NaN),
-    ).toEqual({
+    expect(traversalTransitions(topology(), locationId("ground"), () => Number.NaN)).toEqual({
       kind: "invalid-cost",
       from: locationId("ground"),
       to: locationId("ramp"),
@@ -103,9 +98,7 @@ describe("traversal", () => {
   });
 
   it("reports unknown starting locations explicitly", () => {
-    expect(
-      traversalTransitions(topology(), locationId("missing"), firstConsumerPolicy()),
-    ).toEqual({
+    expect(traversalTransitions(topology(), locationId("missing"), firstConsumerPolicy())).toEqual({
       kind: "unknown-location",
       location: locationId("missing"),
     });
