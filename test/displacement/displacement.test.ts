@@ -48,7 +48,9 @@ describe("displacement", () => {
     ]);
     if (placed.kind !== "placed") throw new Error("fixture setup failed");
 
-    expect(displaceEntity(placed.state, topology(), entity, [locationId("b"), locationId("c")])).toMatchObject({
+    expect(
+      displaceEntity(placed.state, topology(), entity, [locationId("b"), locationId("c")]),
+    ).toMatchObject({
       kind: "displaced",
       from: [locationId("a"), locationId("b")],
       to: [locationId("b"), locationId("c")],
@@ -64,9 +66,13 @@ describe("displacement", () => {
     if (secondPlaced.kind !== "placed") throw new Error("fixture setup failed");
 
     expect(
-      displaceEntity(secondPlaced.state, topology(), second, [locationId("a")], [
-        exclusiveOccupancyPolicy,
-      ]),
+      displaceEntity(
+        secondPlaced.state,
+        topology(),
+        second,
+        [locationId("a")],
+        [exclusiveOccupancyPolicy],
+      ),
     ).toEqual({
       kind: "rejected",
       reason: {
