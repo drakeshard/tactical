@@ -65,10 +65,7 @@ export function setElevation(
   };
 }
 
-export function removeElevation(
-  state: ElevationState,
-  location: LocationId,
-): ElevationResult {
+export function removeElevation(state: ElevationState, location: LocationId): ElevationResult {
   return {
     kind: "removed",
     state: {
