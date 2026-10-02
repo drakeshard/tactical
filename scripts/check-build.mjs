@@ -43,7 +43,8 @@ export function findBuildShapeViolations({ root = process.cwd() } = {}) {
     if (!actualSet.has(file)) violations.push(`dist/: missing expected build artifact "${file}"`);
   }
   for (const file of actual) {
-    if (!expectedSet.has(file)) violations.push(`dist/: unexpected distributable artifact "${file}"`);
+    if (!expectedSet.has(file))
+      violations.push(`dist/: unexpected distributable artifact "${file}"`);
   }
   return violations;
 }
