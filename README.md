@@ -4,9 +4,11 @@ Renderer-neutral deterministic discrete-battlefield Tactical domain mechanisms f
 
 ## Status
 
-This repository is in **v0.1 incubation**. The package identity is `@drakeshard/tactical`, but the package is private and its stable/root gameplay export is intentionally empty.
+Tactical **v0.1 repository-local incubation is complete**. The extraction/public API review deferred every surviving gameplay candidate from stable admission because no real production-game consumer has validated the contracts yet.
 
-Implementation under `src/` is incubation evidence. It is not stable API admission and does not authorize npm publication.
+The package identity remains `@drakeshard/tactical`, but the package is private and its stable/root gameplay export is intentionally empty. Implementation under `src/` remains incubation evidence and does not authorize npm publication.
+
+See `docs/review/v0.1-extraction.md` for the candidate-by-candidate decision record.
 
 ## Scope
 
