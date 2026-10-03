@@ -1,4 +1,4 @@
-import { chooseAiMove, type AiDifficulty } from "./ai.js";
+import { type AiDifficulty, chooseAiMove } from "./ai.js";
 import {
   algebraicCoord,
   applyMove,
