@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "package": "@drakeshard/tactical",
-  "status": "candidate-only",
-  "admissionGate": "closed",
+  "status": "selected-pre-1.0",
+  "admissionGate": "selected",
   "publishAuthorized": false,
-  "reason": "Stable gameplay exports still require real production-consumer admission evidence.",
-  "candidates": [
+  "reason": "Owner-authorized v0.1 public API selection based on completed Tactical incubation and chess integration evidence. npm publication remains separate.",
+  "exports": [
     {
       "subpath": "./identity",
       "source": "src/core/identity.ts",

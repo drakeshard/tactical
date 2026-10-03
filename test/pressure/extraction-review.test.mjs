@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 const root = process.cwd();
 
 describe("Tactical v0.1 extraction decision", () => {
-  it("keeps the package private with zero admitted stable gameplay exports", () => {
+  it("keeps publication private while exposing only the selected subpaths", () => {
     const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
     const rootSource = fs.readFileSync(path.join(root, "src", "index.ts"), "utf8");
 
@@ -13,7 +13,21 @@ describe("Tactical v0.1 extraction decision", () => {
     expect(packageJson.dependencies ?? {}).toEqual({});
     expect(packageJson.optionalDependencies ?? {}).toEqual({});
     expect(packageJson.peerDependencies ?? {}).toEqual({});
-    expect(packageJson.exports).toBeUndefined();
+    expect(Object.keys(packageJson.exports ?? {})).toEqual([
+      "./identity",
+      "./topology",
+      "./square",
+      "./square-queries",
+      "./placement",
+      "./traversal",
+      "./reachability",
+      "./pathfinding",
+      "./elevation",
+      "./square-visibility",
+      "./square-cover",
+      "./displacement",
+    ]);
+    expect(packageJson.exports?.["."]).toBeUndefined();
     expect(packageJson.main).toBeUndefined();
     expect(packageJson.module).toBeUndefined();
     expect(packageJson.types).toBeUndefined();

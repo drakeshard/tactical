@@ -46,5 +46,9 @@ jobs:
         run: pnpm build
       - name: Check build artifact shape
         run: pnpm check:build
+      - name: Check selected public API readiness
+        run: pnpm check:public-api-readiness
+      - name: Verify packed external consumer
+        run: pnpm check:package-consumer
       - name: Performance pressure measurements
         run: pnpm performance:pressure
