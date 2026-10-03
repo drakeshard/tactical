@@ -98,9 +98,7 @@ describe("chess Tactical integration sample", () => {
     );
 
     expect(
-      legalMovesFrom(phantom, { x: 4, y: 3 }).some(
-        (entry) => entry.to.x === 3 && entry.to.y === 2,
-      ),
+      legalMovesFrom(phantom, { x: 4, y: 3 }).some((entry) => entry.to.x === 3 && entry.to.y === 2),
     ).toBe(false);
   });
 
@@ -137,9 +135,7 @@ describe("chess Tactical integration sample", () => {
     );
 
     expect(
-      legalMovesFrom(state, { x: 4, y: 2 }).some(
-        (move) => move.to.x === 4 && move.to.y === 0,
-      ),
+      legalMovesFrom(state, { x: 4, y: 2 }).some((move) => move.to.x === 4 && move.to.y === 0),
     ).toBe(false);
   });
 
@@ -154,9 +150,7 @@ describe("chess Tactical integration sample", () => {
     );
 
     expect(
-      legalMovesFrom(state, { x: 4, y: 5 }).some(
-        (move) => move.to.x === 4 && move.to.y === 6,
-      ),
+      legalMovesFrom(state, { x: 4, y: 5 }).some((move) => move.to.x === 4 && move.to.y === 6),
     ).toBe(false);
   });
 
