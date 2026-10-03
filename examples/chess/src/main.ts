@@ -9,6 +9,7 @@ import {
   type ChessState,
   type Color,
   type PieceKind,
+  type PromotionKind,
 } from "./chess.js";
 
 const glyphs: Readonly<Record<Color, Readonly<Record<PieceKind, string>>>> = {
@@ -20,13 +21,17 @@ const boardElement = document.querySelector<HTMLDivElement>("#board");
 const statusElement = document.querySelector<HTMLHeadingElement>("#status");
 const resetElement = document.querySelector<HTMLButtonElement>("#reset");
 const movesElement = document.querySelector<HTMLOListElement>("#moves");
-if (!boardElement || !statusElement || !resetElement || !movesElement) {
+const promotionElement = document.querySelector<HTMLSelectElement>("#promotion");
+
+if (!boardElement || !statusElement || !resetElement || !movesElement || !promotionElement) {
   throw new Error("Chess UI mount missing");
 }
+
 const board = boardElement;
 const status = statusElement;
 const reset = resetElement;
 const moves = movesElement;
+const promotion = promotionElement;
 
 let state: ChessState = createInitialState();
 let selected: { x: number; y: number } | undefined;
@@ -36,11 +41,22 @@ function describeStatus(): string {
   const result = gameStatus(state);
   if (result.kind === "checkmate") return `Checkmate — ${result.winner} wins`;
   if (result.kind === "stalemate") return "Stalemate";
-  return `${result.turn[0]?.toUpperCase() ?? ""}${result.turn.slice(1)} to move${result.check ? " — check" : ""}`;
+
+  const turn = `${result.turn[0]?.toUpperCase() ?? ""}${result.turn.slice(1)}`;
+  return `${turn} to move${result.check ? " — check" : ""}`;
 }
 
 function legalAt(x: number, y: number): readonly ChessMove[] {
-  return selected ? legalMovesFrom(state, selected).filter((move) => move.to.x === x && move.to.y === y) : [];
+  return selected
+    ? legalMovesFrom(state, selected).filter((move) => move.to.x === x && move.to.y === y)
+    : [];
+}
+
+function preferredMove(candidates: readonly ChessMove[]): ChessMove | undefined {
+  const preferredPromotion = promotion.value as PromotionKind;
+  return (
+    candidates.find((candidate) => candidate.promotion === preferredPromotion) ?? candidates[0]
+  );
 }
 
 function render(): void {
@@ -54,8 +70,15 @@ function render(): void {
       const button = document.createElement("button");
       button.type = "button";
       button.className = `square ${(x + y) % 2 === 0 ? "light" : "dark"}`;
-      button.setAttribute("aria-label", algebraicCoord(coord));
+      button.setAttribute(
+        "aria-label",
+        piece
+          ? `${algebraicCoord(coord)}, ${piece.color} ${piece.kind}`
+          : `${algebraicCoord(coord)}, empty`,
+      );
+
       if (selected?.x === x && selected.y === y) button.classList.add("selected");
+
       const legal = legalAt(x, y);
       if (legal.length > 0) button.classList.add(piece ? "capture" : "legal");
 
@@ -71,12 +94,19 @@ function render(): void {
       }
 
       button.addEventListener("click", () => {
-        const candidate = legal[0];
+        const candidate = preferredMove(legal);
+
         if (selected && candidate) {
           const before = pieceAtCoord(state, selected);
-          const next = applyMove(state, { ...candidate, promotion: candidate.promotion ?? "queen" });
+          const next = applyMove(state, candidate);
+
           if (next && before) {
-            history.push(`${algebraicCoord(selected)}–${algebraicCoord(coord)}${candidate.promotion ? `=${candidate.promotion[0]?.toUpperCase()}` : ""}`);
+            const promotionSuffix = candidate.promotion
+              ? `=${candidate.promotion[0]?.toUpperCase()}`
+              : "";
+            history.push(
+              `${algebraicCoord(selected)}–${algebraicCoord(coord)}${promotionSuffix}`,
+            );
             state = next;
             selected = undefined;
           }
@@ -85,6 +115,7 @@ function render(): void {
         } else {
           selected = undefined;
         }
+
         render();
       });
 
@@ -92,11 +123,13 @@ function render(): void {
     }
   }
 
-  moves.replaceChildren(...history.map((entry) => {
-    const item = document.createElement("li");
-    item.textContent = entry;
-    return item;
-  }));
+  moves.replaceChildren(
+    ...history.map((entry) => {
+      const item = document.createElement("li");
+      item.textContent = entry;
+      return item;
+    }),
+  );
 }
 
 reset.addEventListener("click", () => {
