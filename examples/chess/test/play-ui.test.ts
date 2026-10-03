@@ -1,12 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { chooseAiMove } from "../src/ai.js";
-import {
-  createClock,
-  elapseClock,
-  formatClock,
-  hasTimedOut,
-} from "../src/clock.js";
 import { createInitialState, createState } from "../src/chess.js";
+import { createClock, elapseClock, formatClock, hasTimedOut } from "../src/clock.js";
 
 describe("chess sample AI", () => {
   it("is deterministic for the same position and difficulty", () => {
