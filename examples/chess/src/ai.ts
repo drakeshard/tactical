@@ -1,10 +1,10 @@
 import {
   allLegalMoves,
   applyMove,
-  gameStatus,
   type ChessMove,
   type ChessState,
   type Color,
+  gameStatus,
   type PieceKind,
 } from "./chess.js";
 
@@ -19,21 +19,16 @@ const pieceValues: Readonly<Record<PieceKind, number>> = {
   king: 0,
 };
 
-const searchConfig: Readonly<Record<AiDifficulty, { readonly depth: number; readonly nodeCap: number }>> =
-  {
-    easy: { depth: 1, nodeCap: 96 },
-    normal: { depth: 2, nodeCap: 1800 },
-    hard: { depth: 3, nodeCap: 12000 },
-  };
+const searchConfig: Readonly<
+  Record<AiDifficulty, { readonly depth: number; readonly nodeCap: number }>
+> = {
+  easy: { depth: 1, nodeCap: 96 },
+  normal: { depth: 2, nodeCap: 1800 },
+  hard: { depth: 3, nodeCap: 12000 },
+};
 
 function moveKey(move: ChessMove): string {
-  return [
-    move.from.y,
-    move.from.x,
-    move.to.y,
-    move.to.x,
-    move.promotion ?? "",
-  ].join(":");
+  return [move.from.y, move.from.x, move.to.y, move.to.x, move.promotion ?? ""].join(":");
 }
 
 function sortedMoves(state: ChessState): readonly ChessMove[] {
@@ -96,10 +91,7 @@ function search(
   return best;
 }
 
-export function chooseAiMove(
-  state: ChessState,
-  difficulty: AiDifficulty,
-): ChessMove | undefined {
+export function chooseAiMove(state: ChessState, difficulty: AiDifficulty): ChessMove | undefined {
   const config = searchConfig[difficulty];
   const moves = sortedMoves(state);
   if (moves.length === 0) return undefined;
