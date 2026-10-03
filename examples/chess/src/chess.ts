@@ -236,14 +236,14 @@ function pseudoMovesForPiece(state: ChessState, piece: ChessPiece, attacksOnly =
     return moves;
   }
 
-  const directions =
+  const directions: readonly (readonly [number, number])[] =
     piece.kind === "rook"
-      ? [[1,0],[-1,0],[0,1],[0,-1]]
+      ? [[1, 0], [-1, 0], [0, 1], [0, -1]]
       : piece.kind === "bishop"
-        ? [[1,1],[1,-1],[-1,1],[-1,-1]]
-        : [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+        ? [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+        : [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
 
-  for (const [dx, dy] of directions as readonly (readonly [number, number])[]) {
+  for (const [dx, dy] of directions) {
     for (let distance = 1; distance < 8; distance += 1) {
       const to = { x: from.x + dx * distance, y: from.y + dy * distance };
       if (!squareContains(BOARD.bounds, to)) break;
