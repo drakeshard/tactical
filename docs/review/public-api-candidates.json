@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "package": "@drakeshard/tactical",
+  "status": "candidate-only",
+  "admissionGate": "closed",
+  "publishAuthorized": false,
+  "reason": "Stable gameplay exports still require real production-consumer admission evidence.",
+  "candidates": [
+    {
+      "subpath": "./identity",
+      "source": "src/core/identity.ts",
+      "dist": "dist/core/identity.js",
+      "types": "dist/core/identity.d.ts"
+    },
+    {
+      "subpath": "./topology",
+      "source": "src/space/topology.ts",
+      "dist": "dist/space/topology.js",
+      "types": "dist/space/topology.d.ts"
+    },
+    {
+      "subpath": "./square",
+      "source": "src/square/topology.ts",
+      "dist": "dist/square/topology.js",
+      "types": "dist/square/topology.d.ts"
+    },
+    {
+      "subpath": "./square-queries",
+      "source": "src/square/queries.ts",
+      "dist": "dist/square/queries.js",
+      "types": "dist/square/queries.d.ts"
+    },
+    {
+      "subpath": "./placement",
+      "source": "src/placement/placement.ts",
+      "dist": "dist/placement/placement.js",
+      "types": "dist/placement/placement.d.ts"
+    },
+    {
+      "subpath": "./traversal",
+      "source": "src/traversal/traversal.ts",
+      "dist": "dist/traversal/traversal.js",
+      "types": "dist/traversal/traversal.d.ts"
+    },
+    {
+      "subpath": "./reachability",
+      "source": "src/movement/reachability.ts",
+      "dist": "dist/movement/reachability.js",
+      "types": "dist/movement/reachability.d.ts"
+    },
+    {
+      "subpath": "./pathfinding",
+      "source": "src/movement/pathfinding.ts",
+      "dist": "dist/movement/pathfinding.js",
+      "types": "dist/movement/pathfinding.d.ts"
+    },
+    {
+      "subpath": "./elevation",
+      "source": "src/elevation/elevation.ts",
+      "dist": "dist/elevation/elevation.js",
+      "types": "dist/elevation/elevation.d.ts"
+    },
+    {
+      "subpath": "./square-visibility",
+      "source": "src/visibility/square-los.ts",
+      "dist": "dist/visibility/square-los.js",
+      "types": "dist/visibility/square-los.d.ts"
+    },
+    {
+      "subpath": "./square-cover",
+      "source": "src/cover/square-cover.ts",
+      "dist": "dist/cover/square-cover.js",
+      "types": "dist/cover/square-cover.d.ts"
+    },
+    {
+      "subpath": "./displacement",
+      "source": "src/displacement/displacement.ts",
+      "dist": "dist/displacement/displacement.js",
+      "types": "dist/displacement/displacement.d.ts"
+    }
+  ]
+}
