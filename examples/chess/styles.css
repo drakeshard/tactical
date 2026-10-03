@@ -20,7 +20,7 @@
   color: var(--text);
 }
 
-* { box-sizing: border-box; }
+* {\n  box-sizing: border-box;\n}
 
 html {
   min-width: 320px;
@@ -39,11 +39,11 @@ body {
 }
 
 button,
-select { font: inherit; }
+select {\n  font: inherit;\n}
 
 button,
 select,
-.square { -webkit-tap-highlight-color: transparent; }
+.square {\n  -webkit-tap-highlight-color: transparent;\n}
 
 .app-shell {
   width: min(1240px, calc(100% - 48px));
@@ -125,7 +125,7 @@ h1 {
   box-shadow: 0 0 14px rgba(103, 216, 156, 0.65);
 }
 
-main { padding-top: 20px; }
+main {\n  padding-top: 20px;\n}
 
 .intro {
   max-width: 820px;
@@ -160,8 +160,8 @@ main { padding-top: 20px; }
   padding: 7px 2px;
 }
 
-.player-strip-black { margin-bottom: 7px; }
-.player-strip-white { margin-top: 7px; }
+.player-strip-black {\n  margin-bottom: 7px;\n}
+.player-strip-white {\n  margin-top: 7px;\n}
 
 .player-token {
   display: grid;
@@ -175,7 +175,7 @@ main { padding-top: 20px; }
   line-height: 1;
 }
 
-.player-strip span { display: block; }
+.player-strip span {\n  display: block;\n}
 
 .player-label {
   color: #eef2f7;
@@ -235,9 +235,9 @@ main { padding-top: 20px; }
     box-shadow 130ms ease;
 }
 
-.square.light { background: var(--light-square); }
-.square.dark { background: var(--dark-square); }
-.square:hover { filter: brightness(1.055); }
+.square.light {\n  background: var(--light-square);\n}
+.square.dark {\n  background: var(--dark-square);\n}
+.square:hover {\n  filter: brightness(1.055);\n}
 
 .square::before {
   position: absolute;
@@ -310,8 +310,8 @@ main { padding-top: 20px; }
   pointer-events: none;
 }
 
-.square.light .edge-label { color: var(--light-label); }
-.square.dark .edge-label { color: var(--dark-label); }
+.square.light .edge-label {\n  color: var(--light-label);\n}
+.square.dark .edge-label {\n  color: var(--dark-label);\n}
 
 .file-label {
   right: 5px;
@@ -511,62 +511,62 @@ footer {
 }
 
 @media (max-width: 1180px) {
-  :root { --tile-size: 72px; }
+  :root {\n    --tile-size: 72px;\n  }
 
-  .app-shell { width: min(1080px, calc(100% - 40px)); }
+  .app-shell {\n    width: min(1080px, calc(100% - 40px));\n  }
 
   .game-layout {
     grid-template-columns: var(--board-size) 300px;
     gap: 24px;
   }
 
-  .sidebar { width: 300px; }
+  .sidebar {\n    width: 300px;\n  }
 }
 
 @media (max-width: 980px) {
-  :root { --tile-size: 64px; }
+  :root {\n    --tile-size: 64px;\n  }
 
-  .app-shell { width: min(760px, calc(100% - 32px)); }
+  .app-shell {\n    width: min(760px, calc(100% - 32px));\n  }
 
-  .game-layout { grid-template-columns: var(--board-size); }
+  .game-layout {\n    grid-template-columns: var(--board-size);\n  }
 
   .sidebar {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     width: var(--board-size);
   }
 
-  .evidence-card { grid-column: 1 / -1; }
+  .evidence-card {\n    grid-column: 1 / -1;\n  }
 
-  .moves { max-height: 180px; }
+  .moves {\n    max-height: 180px;\n  }
 }
 
 @media (max-width: 700px) {
-  :root { --tile-size: 56px; }
+  :root {\n    --tile-size: 56px;\n  }
 
   .app-shell {
     width: min(620px, calc(100% - 24px));
     padding-top: 18px;
   }
 
-  .topbar { align-items: flex-start; }
-  .topbar-badge { display: none; }
-  .intro { margin-bottom: 18px; }
+  .topbar {\n    align-items: flex-start;\n  }
+  .topbar-badge {\n    display: none;\n  }
+  .intro {\n    margin-bottom: 18px;\n  }
 
-  .sidebar { grid-template-columns: 1fr; }
-  .evidence-card { grid-column: auto; }
+  .sidebar {\n    grid-template-columns: 1fr;\n  }
+  .evidence-card {\n    grid-column: auto;\n  }
 }
 
 @media (max-width: 560px) {
-  :root { --tile-size: 48px; }
+  :root {\n    --tile-size: 48px;\n  }
 
-  .app-shell { width: min(500px, calc(100% - 20px)); }
+  .app-shell {\n    width: min(500px, calc(100% - 20px));\n  }
 
   .brand-mark {
     width: 38px;
     height: 38px;
   }
 
-  .intro p { font-size: 0.88rem; }
+  .intro p {\n    font-size: 0.88rem;\n  }
 
   .board-frame {
     width: calc(var(--board-size) + 12px);
@@ -575,18 +575,18 @@ footer {
     border-radius: 13px;
   }
 
-  .card { padding: 16px; }
+  .card {\n    padding: 16px;\n  }
 }
 
 @media (max-width: 430px) {
-  :root { --tile-size: 42px; }
+  :root {\n    --tile-size: 42px;\n  }
 
-  .app-shell { width: calc(100% - 16px); }
-  .topbar { padding-bottom: 16px; }
-  .brand { gap: 10px; }
-  .brand-kicker { font-size: 0.64rem; }
-  h1 { font-size: 1.35rem; }
-  .player-strip { min-height: 40px; }
+  .app-shell {\n    width: calc(100% - 16px);\n  }
+  .topbar {\n    padding-bottom: 16px;\n  }
+  .brand {\n    gap: 10px;\n  }
+  .brand-kicker {\n    font-size: 0.64rem;\n  }
+  h1 {\n    font-size: 1.35rem;\n  }
+  .player-strip {\n    min-height: 40px;\n  }
 
   .player-token {
     width: 30px;
@@ -594,14 +594,14 @@ footer {
     font-size: 1.15rem;
   }
 
-  .piece { font-size: calc(var(--tile-size) * 0.68); }
+  .piece {\n    font-size: calc(var(--tile-size) * 0.68);\n  }
 }
 
 @media (max-width: 370px) {
-  :root { --tile-size: 36px; }
+  :root {\n    --tile-size: 36px;\n  }
 
-  .app-shell { width: calc(100% - 12px); }
-  .intro { display: none; }
+  .app-shell {\n    width: calc(100% - 12px);\n  }
+  .intro {\n    display: none;\n  }
 
   .board-frame {
     width: calc(var(--board-size) + 10px);
@@ -609,9 +609,9 @@ footer {
     padding: 5px;
   }
 
-  .card { border-radius: 13px; }
+  .card {\n    border-radius: 13px;\n  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .square { transition: none; }
+  .square {\n    transition: none;\n  }
 }
