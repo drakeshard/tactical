@@ -1,6 +1,6 @@
 # Chess — Tactical integration pressure test
 
-This browser sample pressure-tests the repository-local Tactical incubation contracts against chess,
+Public test page: https://drakeshard.github.io/tactical/\n\nThis browser sample pressure-tests the repository-local Tactical incubation contracts against chess,
 a materially different discrete-board consumer.
 
 ## What the sample exercises from Tactical
