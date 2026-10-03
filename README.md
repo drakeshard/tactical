@@ -1,73 +1,73 @@
 # Drakeshard Tactical
 
-Renderer-neutral deterministic discrete-battlefield Tactical domain mechanisms for Drakeshard games.
+Renderer-neutral deterministic discrete-battlefield mechanisms for Drakeshard games.
 
-## Status
+## v0.1 selected public API
 
-Tactical **v0.1 repository-local incubation is complete**. The extraction/public API review
-deferred every surviving gameplay candidate from stable admission because no real production-game
-consumer has validated the contracts yet.
+The pre-1.0 API selected for `@drakeshard/tactical@0.1.0` is:
 
-The package identity remains `@drakeshard/tactical`, but the package is private and its stable/root
-gameplay export is intentionally empty. Implementation under `src/` remains incubation evidence and
-does not authorize npm publication.
+- `@drakeshard/tactical/identity`
+- `@drakeshard/tactical/topology`
+- `@drakeshard/tactical/square`
+- `@drakeshard/tactical/square-queries`
+- `@drakeshard/tactical/placement`
+- `@drakeshard/tactical/traversal`
+- `@drakeshard/tactical/reachability`
+- `@drakeshard/tactical/pathfinding`
+- `@drakeshard/tactical/elevation`
+- `@drakeshard/tactical/square-visibility`
+- `@drakeshard/tactical/square-cover`
+- `@drakeshard/tactical/displacement`
 
-Packaging mechanics are now prepared for a future controlled admission: publication metadata,
-candidate subpath mapping, build-target validation, and a public-API readiness gate are present.
-That preparation does **not** change the admission decision. See
-`docs/review/public-api-readiness.md` and `docs/review/public-api-candidates.json`.
+There is intentionally no root gameplay import from `@drakeshard/tactical` in v0.1. Consumers
+choose only the battlefield mechanisms they need.
 
-See `docs/review/v0.1-extraction.md` for the candidate-by-candidate decision record.
+The package remains `private: true` until the separate npm release task. API selection and artifact
+verification do not themselves authorize publication.
 
-## Scope
+## Scope and boundaries
 
-Tactical may own narrow reusable mechanisms for:
+Tactical owns deterministic battlefield facts and transitions: opaque identities, topology,
+placement/occupancy, traversal, movement search, elevation, logical square visibility, structural
+cover observations, and structural displacement.
 
-- Tactical and location identity;
-- topology, with square topology as the first implementation;
-- placement and occupancy;
-- traversal;
-- deterministic reachability and pathfinding;
-- spatial queries;
-- optional logical elevation, visibility/LoS, cover observations, and displacement;
-- sequencing only if an admission spike proves independent Tactical ownership.
+Tactical does not own RPG progression, combat formulas, abilities, AP/action economy, objectives,
+AI, clocks, title-specific terrain effects, renderer/physics, input, or UI. RPG and Tactical remain
+sibling libraries; the consuming application owns their composition.
 
-Tactical is **not** defined as grid + unit + turn.
+Runtime dependencies remain zero.
 
-## Non-ownership
+## Evidence
 
-Tactical does not own RPG progression/classes/stats/resources/equipment, combat formulas, abilities,
-cooldowns, statuses, AP/action economy, objectives, AI, encounter scripting, title-specific terrain
-effects, renderer transforms/physics, camera, input, or UI.
+The chess specimen at `examples/chess` provides a materially different discrete-board composition
+test. Chess movement semantics, turns, capture, check/mate, castling, en passant, promotion, clocks,
+and AI remain application-owned.
 
-RPG and Tactical are sibling libraries. Consuming games compose their state.
+The package release-candidate gate also packs the exact artifact, installs it into a clean temporary
+consumer, typechecks every selected subpath, imports every selected subpath at runtime by package
+name, verifies the root import remains unsupported, and checks that source/tests/examples/scripts
+do not leak into the installed package.
 
-## Evidence samples
+The machine-readable selection record is
+`docs/review/public-api-candidates.json`.
 
-`examples/chess` is a materially different discrete-board pressure test. It directly exercises
-Tactical identity, square topology, placement/occupancy, and structural line facts while keeping
-chess movement, turns, captures, check/mate, castling, en passant, promotion, and draw rules
-application-owned.
+## Local verification
 
-Run the sample locally with:
+```sh
+corepack enable
+pnpm install --frozen-lockfile
+pnpm verify
+```
+
+`pnpm verify` covers formatting/lint, architecture boundaries, selected-package invariants,
+strict source/test typechecking, tests, build shape, selected public-API readiness, packed external
+consumer verification, and representative performance pressure.
+
+Run the chess sample locally with:
 
 ```sh
 pnpm chess:preview
 ```
-
-## Engineering baseline
-
-Run:
-
-```sh
-pnpm verify
-```
-
-This covers formatting/lint, architecture boundaries, package/admission invariants, strict
-source/test typechecking, tests, deterministic build, build-shape validation, public-API readiness
-mechanics, and representative performance pressure.
-
-See `docs/architecture/incubation-conventions.md` for the executable incubation contract.
 
 ## License
 
