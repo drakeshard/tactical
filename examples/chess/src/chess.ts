@@ -1,19 +1,19 @@
-import { tacticalEntityId, type TacticalEntityId } from "../../../src/core/identity.js";
+import { type TacticalEntityId, tacticalEntityId } from "../../../src/core/identity.js";
 import {
   emptyPlacementState,
   occupantsAt,
+  type PlacementState,
   placeEntity,
   relocateEntity,
   removeEntity,
-  type PlacementState,
 } from "../../../src/placement/placement.js";
 import {
   createSquareTopology,
   parseSquareLocationId,
-  squareContains,
-  squareLocationId,
   type SquareCoord,
   type SquareTopologyDefinition,
+  squareContains,
+  squareLocationId,
 } from "../../../src/square/topology.js";
 import { squareLineTrace } from "../../../src/visibility/square-los.js";
 
@@ -437,7 +437,7 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
     const rookFrom = move.to.x === 6 ? { x: 7, y } : { x: 0, y };
     const rookTo = move.to.x === 6 ? { x: 5, y } : { x: 3, y };
     const rook = pieceAt({ ...state, pieces, placement }, rookFrom);
-    if (!rook || rook.kind !== "rook" || rook.color !== piece.color) return undefined;
+    if (rook?.kind !== "rook" || rook.color !== piece.color) return undefined;
 
     const rookMoved = relocateEntity(placement, topology, rook.id, [squareLocationId(rookTo)]);
     if (rookMoved.kind !== "relocated") return undefined;
@@ -447,9 +447,7 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
   const promotionRank = piece.color === "white" ? 0 : 7;
   if (piece.kind === "pawn" && move.to.y === promotionRank) {
     const promotion = move.promotion ?? "queen";
-    pieces = pieces.map((entry) =>
-      entry.id === piece.id ? { ...entry, kind: promotion } : entry,
-    );
+    pieces = pieces.map((entry) => (entry.id === piece.id ? { ...entry, kind: promotion } : entry));
   }
 
   let castling = { ...state.castling };
