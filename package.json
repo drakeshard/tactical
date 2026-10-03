@@ -21,7 +21,7 @@
     "typecheck:src": "tsc --noEmit -p tsconfig.json",
     "typecheck:test": "tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run --passWithNoTests",
-    "build": "tsc",
+    "build": "tsc && tsc -p examples/chess/tsconfig.json",
     "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm check:build && pnpm performance:pressure",
     "performance:pressure": "node scripts/performance-pressure.mjs"
   },
