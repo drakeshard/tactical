@@ -63,8 +63,9 @@ const BOARD: SquareTopologyDefinition = {
   adjacency: "eight",
 };
 
-const topology = createSquareTopology(BOARD);
-if (!topology) throw new Error("Chess board topology is invalid");
+const createdTopology = createSquareTopology(BOARD);
+if (!createdTopology) throw new Error("Chess board topology is invalid");
+const topology = createdTopology;
 
 const PIECE_ORDER: readonly PieceKind[] = [
   "rook",
