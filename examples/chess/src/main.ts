@@ -1,15 +1,15 @@
 import {
   algebraicCoord,
   applyMove,
-  createInitialState,
-  gameStatus,
-  legalMovesFrom,
-  pieceAtCoord,
   type ChessMove,
   type ChessState,
   type Color,
+  createInitialState,
+  gameStatus,
+  legalMovesFrom,
   type PieceKind,
   type PromotionKind,
+  pieceAtCoord,
 } from "./chess.js";
 
 const glyphs: Readonly<Record<Color, Readonly<Record<PieceKind, string>>>> = {
@@ -104,9 +104,7 @@ function render(): void {
             const promotionSuffix = candidate.promotion
               ? `=${candidate.promotion[0]?.toUpperCase()}`
               : "";
-            history.push(
-              `${algebraicCoord(selected)}–${algebraicCoord(coord)}${promotionSuffix}`,
-            );
+            history.push(`${algebraicCoord(selected)}–${algebraicCoord(coord)}${promotionSuffix}`);
             state = next;
             selected = undefined;
           }
