@@ -6,8 +6,8 @@
       "!!**/dist",
       "!!**/coverage",
       "!!**/node_modules",
-      "!!examples/chess/src/**",
-      "!!examples/chess/test/**",
+      "!!examples/chess/src",
+      "!!examples/chess/test",
       "!!examples/chess/styles.css"
     ]
   },
