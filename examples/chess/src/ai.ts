@@ -25,8 +25,8 @@ const searchConfig: Readonly<
   Record<AiDifficulty, { readonly depth: number; readonly nodeCap: number }>
 > = {
   easy: { depth: 1, nodeCap: 220 },
-  normal: { depth: 2, nodeCap: 2_500 },
-  hard: { depth: 3, nodeCap: 10_000 },
+  normal: { depth: 2, nodeCap: 1_800 },
+  hard: { depth: 3, nodeCap: 5_000 },
 };
 
 function moveKey(move: ChessMove): string {
@@ -49,11 +49,7 @@ function movePriority(state: ChessState, move: ChessMove): number {
   if (move.promotion) score += 8_000 + pieceValues[move.promotion];
 
   const next = applyMove(state, move);
-  if (next) {
-    const status = gameStatus(next);
-    if (status.kind === "checkmate") score += 1_000_000;
-    else if (isInCheck(next, next.turn)) score += 5_000;
-  }
+  if (next && isInCheck(next, next.turn)) score += 5_000;
 
   const centerDistance = Math.abs(3.5 - move.to.x) + Math.abs(3.5 - move.to.y);
   score += Math.round((7 - centerDistance) * 4);
