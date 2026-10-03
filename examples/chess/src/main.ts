@@ -1,13 +1,5 @@
 import { chooseAiMove, type AiDifficulty } from "./ai.js";
 import {
-  type ChessClock,
-  createClock,
-  elapseClock,
-  formatClock,
-  hasTimedOut,
-  type TimeControl,
-} from "./clock.js";
-import {
   algebraicCoord,
   applyMove,
   type ChessMove,
@@ -20,6 +12,14 @@ import {
   type PromotionKind,
   pieceAtCoord,
 } from "./chess.js";
+import {
+  type ChessClock,
+  createClock,
+  elapseClock,
+  formatClock,
+  hasTimedOut,
+  type TimeControl,
+} from "./clock.js";
 
 type GameMode = "local" | "ai";
 
@@ -144,9 +144,7 @@ function sameSquare(
 }
 
 function describeMove(move: ChessMove): string {
-  const promotionSuffix = move.promotion
-    ? `=${move.promotion[0]?.toUpperCase() ?? ""}`
-    : "";
+  const promotionSuffix = move.promotion ? `=${move.promotion[0]?.toUpperCase() ?? ""}` : "";
   return `${algebraicCoord(move.from)}–${algebraicCoord(move.to)}${promotionSuffix}`;
 }
 
@@ -209,10 +207,7 @@ function renderBoard(): void {
       );
 
       if (selected && sameSquare(selected, coord)) button.classList.add("selected");
-      if (
-        lastMove &&
-        (sameSquare(lastMove.from, coord) || sameSquare(lastMove.to, coord))
-      ) {
+      if (lastMove && (sameSquare(lastMove.from, coord) || sameSquare(lastMove.to, coord))) {
         button.classList.add("last-move");
       }
 
