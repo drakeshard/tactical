@@ -25,8 +25,8 @@ const searchConfig: Readonly<
   Record<AiDifficulty, { readonly depth: number; readonly nodeCap: number }>
 > = {
   easy: { depth: 1, nodeCap: 220 },
-  normal: { depth: 2, nodeCap: 5_000 },
-  hard: { depth: 3, nodeCap: 28_000 },
+  normal: { depth: 2, nodeCap: 2_500 },
+  hard: { depth: 3, nodeCap: 10_000 },
 };
 
 function moveKey(move: ChessMove): string {
