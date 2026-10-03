@@ -51,11 +51,11 @@ let history: string[] = [];
 
 function describeStatus(): string {
   const result = gameStatus(state);
-  if (result.kind === "checkmate") return "Checkmate · " + result.winner + " wins";
+  if (result.kind === "checkmate") return `Checkmate · ${result.winner} wins`;
   if (result.kind === "stalemate") return "Stalemate";
 
   const turn = (result.turn[0]?.toUpperCase() ?? "") + result.turn.slice(1);
-  return turn + " to move" + (result.check ? " · Check" : "");
+  return `${turn} to move${result.check ? " · Check" : ""}`;
 }
 
 function legalAt(x: number, y: number): readonly ChessMove[] {
@@ -99,12 +99,12 @@ function render(): void {
       const piece = pieceAtCoord(state, coord);
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "square " + ((x + y) % 2 === 0 ? "light" : "dark");
+      button.className = `square ${(x + y) % 2 === 0 ? "light" : "dark"}`;
       button.setAttribute(
         "aria-label",
         piece
-          ? algebraicCoord(coord) + ", " + piece.color + " " + piece.kind
-          : algebraicCoord(coord) + ", empty",
+          ? `${algebraicCoord(coord)}, ${piece.color} ${piece.kind}`
+          : `${algebraicCoord(coord)}, empty`,
       );
 
       if (selected?.x === x && selected.y === y) button.classList.add("selected");
@@ -116,7 +116,7 @@ function render(): void {
 
       if (piece) {
         const glyph = document.createElement("span");
-        glyph.className = "piece piece-" + piece.color;
+        glyph.className = `piece piece-${piece.color}`;
         glyph.textContent = glyphs[piece.color][piece.kind];
         button.append(glyph);
       }
@@ -130,11 +130,9 @@ function render(): void {
 
           if (next && before) {
             const promotionSuffix = candidate.promotion
-              ? "=" + (candidate.promotion[0]?.toUpperCase() ?? "")
+              ? `=${candidate.promotion[0]?.toUpperCase() ?? ""}`
               : "";
-            history.push(
-              algebraicCoord(selected) + "–" + algebraicCoord(coord) + promotionSuffix,
-            );
+            history.push(`${algebraicCoord(selected)}–${algebraicCoord(coord)}${promotionSuffix}`);
             state = next;
             selected = undefined;
           }
