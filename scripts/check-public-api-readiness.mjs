@@ -34,7 +34,9 @@ export function findPublicApiReadinessViolations({ root = process.cwd() } = {}) 
   }
   for (const field of ["main", "module", "types", "typings"]) {
     if (packageJson[field] !== undefined) {
-      violations.push(`package.json: ${field} must remain absent while the admission gate is closed`);
+      violations.push(
+        `package.json: ${field} must remain absent while the admission gate is closed`,
+      );
     }
   }
   if (packageJson.engines !== undefined) {
@@ -43,10 +45,14 @@ export function findPublicApiReadinessViolations({ root = process.cwd() } = {}) 
     );
   }
   if (packageJson.sideEffects !== false) {
-    violations.push('package.json: "sideEffects" must be false for the renderer-neutral module set');
+    violations.push(
+      'package.json: "sideEffects" must be false for the renderer-neutral module set',
+    );
   }
   if (packageJson.publishConfig?.access !== "public") {
-    violations.push('package.json: future package publication must declare publishConfig.access="public"');
+    violations.push(
+      'package.json: future package publication must declare publishConfig.access="public"',
+    );
   }
   if (packageJson.repository?.url !== "git+https://github.com/drakeshard/tactical.git") {
     violations.push("package.json: repository metadata must point at drakeshard/tactical");
