@@ -5,21 +5,10 @@ import { describe, expect, it } from "vitest";
 
 describe("chess example build gate", () => {
   it("typechecks the complete browser sample", () => {
-    const tsc = path.join(
-      process.cwd(),
-      "node_modules",
-      "typescript",
-      "bin",
-      "tsc",
-    );
+    const tsc = path.join(process.cwd(), "node_modules", "typescript", "bin", "tsc");
 
     expect(() =>
-      execFileSync(process.execPath, [
-        tsc,
-        "-p",
-        "examples/chess/tsconfig.json",
-        "--noEmit",
-      ], {
+      execFileSync(process.execPath, [tsc, "-p", "examples/chess/tsconfig.json", "--noEmit"], {
         cwd: process.cwd(),
         stdio: "pipe",
       }),
