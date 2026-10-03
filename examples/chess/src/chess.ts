@@ -1,7 +1,4 @@
-import {
-  tacticalEntityId,
-  type TacticalEntityId,
-} from "../../../src/core/identity.js";
+import { tacticalEntityId, type TacticalEntityId } from "../../../src/core/identity.js";
 import {
   emptyPlacementState,
   occupantsAt,
@@ -145,7 +142,12 @@ export function createInitialState(): ChessState {
 }
 
 export function createState(
-  pieces: readonly { readonly color: Color; readonly kind: PieceKind; readonly coord: SquareCoord; readonly id: string }[],
+  pieces: readonly {
+    readonly color: Color;
+    readonly kind: PieceKind;
+    readonly coord: SquareCoord;
+    readonly id: string;
+  }[],
   turn: Color = "white",
   castling: CastlingRights = {
     whiteKingSide: false,
@@ -157,13 +159,20 @@ export function createState(
 ): ChessState {
   let placement = emptyPlacementState();
   const mapped: ChessPiece[] = [];
+
   for (const item of pieces) {
-    const piece: ChessPiece = { id: tacticalEntityId(item.id), color: item.color, kind: item.kind };
+    const piece: ChessPiece = {
+      id: tacticalEntityId(item.id),
+      color: item.color,
+      kind: item.kind,
+    };
     mapped.push(piece);
+
     const result = placeEntity(placement, topology, piece.id, [squareLocationId(item.coord)]);
     if (result.kind !== "placed") throw new Error("Fixture placement failed");
     placement = result.state;
   }
+
   return {
     pieces: mapped,
     placement,
@@ -180,22 +189,43 @@ function structuralClear(state: ChessState, from: SquareCoord, to: SquareCoord):
   return trace.slice(1, -1).every((coord) => isEmpty(state, coord));
 }
 
-function canLand(state: ChessState, piece: ChessPiece, to: SquareCoord): boolean {
+function canLand(
+  state: ChessState,
+  piece: ChessPiece,
+  to: SquareCoord,
+  attacksOnly: boolean,
+): boolean {
   if (!squareContains(BOARD.bounds, to)) return false;
+  if (attacksOnly) return true;
+
   const target = pieceAt(state, to);
-  return target === undefined || target.color !== piece.color;
+  return target === undefined || (target.color !== piece.color && target.kind !== "king");
 }
 
-function pseudoMovesForPiece(state: ChessState, piece: ChessPiece, attacksOnly = false): SquareCoord[] {
+function pseudoMovesForPiece(
+  state: ChessState,
+  piece: ChessPiece,
+  attacksOnly = false,
+): SquareCoord[] {
   const from = coordOf(state, piece);
   if (!from) return [];
+
   const moves: SquareCoord[] = [];
   const add = (to: SquareCoord) => {
-    if (canLand(state, piece, to)) moves.push(to);
+    if (canLand(state, piece, to, attacksOnly)) moves.push(to);
   };
 
   if (piece.kind === "knight") {
-    for (const [dx, dy] of [[1,2],[2,1],[2,-1],[1,-2],[-1,-2],[-2,-1],[-2,1],[-1,2]] as const) {
+    for (const [dx, dy] of [
+      [1, 2],
+      [2, 1],
+      [2, -1],
+      [1, -2],
+      [-1, -2],
+      [-2, -1],
+      [-2, 1],
+      [-1, 2],
+    ] as const) {
       add({ x: from.x + dx, y: from.y + dy });
     }
     return moves;
@@ -207,6 +237,7 @@ function pseudoMovesForPiece(state: ChessState, piece: ChessPiece, attacksOnly =
         if (dx !== 0 || dy !== 0) add({ x: from.x + dx, y: from.y + dy });
       }
     }
+
     if (!attacksOnly) {
       for (const castle of castleTargets(state, piece)) moves.push(castle);
     }
@@ -215,21 +246,36 @@ function pseudoMovesForPiece(state: ChessState, piece: ChessPiece, attacksOnly =
 
   if (piece.kind === "pawn") {
     const direction = piece.color === "white" ? -1 : 1;
+
     for (const dx of [-1, 1]) {
       const capture = { x: from.x + dx, y: from.y + direction };
       if (!squareContains(BOARD.bounds, capture)) continue;
+
       if (attacksOnly) {
         moves.push(capture);
-      } else {
-        const target = pieceAt(state, capture);
-        if (target && target.color !== piece.color) moves.push(capture);
-        else if (state.enPassantTarget && sameCoord(state.enPassantTarget, capture)) moves.push(capture);
+        continue;
+      }
+
+      const target = pieceAt(state, capture);
+      if (target && target.color !== piece.color && target.kind !== "king") {
+        moves.push(capture);
+        continue;
+      }
+
+      if (state.enPassantTarget && sameCoord(state.enPassantTarget, capture)) {
+        const adjacent = pieceAt(state, { x: capture.x, y: from.y });
+        if (adjacent?.kind === "pawn" && adjacent.color !== piece.color) {
+          moves.push(capture);
+        }
       }
     }
+
     if (attacksOnly) return moves;
+
     const one = { x: from.x, y: from.y + direction };
     if (squareContains(BOARD.bounds, one) && isEmpty(state, one)) {
       moves.push(one);
+
       const startRank = piece.color === "white" ? 6 : 1;
       const two = { x: from.x, y: from.y + 2 * direction };
       if (from.y === startRank && isEmpty(state, two)) moves.push(two);
@@ -239,31 +285,58 @@ function pseudoMovesForPiece(state: ChessState, piece: ChessPiece, attacksOnly =
 
   const directions: readonly (readonly [number, number])[] =
     piece.kind === "rook"
-      ? [[1, 0], [-1, 0], [0, 1], [0, -1]]
+      ? [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]
       : piece.kind === "bishop"
-        ? [[1, 1], [1, -1], [-1, 1], [-1, -1]]
-        : [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+        ? [
+            [1, 1],
+            [1, -1],
+            [-1, 1],
+            [-1, -1],
+          ]
+        : [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+            [1, 1],
+            [1, -1],
+            [-1, 1],
+            [-1, -1],
+          ];
 
   for (const [dx, dy] of directions) {
     for (let distance = 1; distance < 8; distance += 1) {
       const to = { x: from.x + dx * distance, y: from.y + dy * distance };
       if (!squareContains(BOARD.bounds, to)) break;
       if (!structuralClear(state, from, to)) break;
+
       const target = pieceAt(state, to);
-      if (!target) moves.push(to);
-      else {
-        if (target.color !== piece.color) moves.push(to);
-        break;
+      if (!target) {
+        moves.push(to);
+        continue;
       }
+
+      if (attacksOnly || (target.color !== piece.color && target.kind !== "king")) {
+        moves.push(to);
+      }
+      break;
     }
   }
+
   return moves;
 }
 
 function isSquareAttacked(state: ChessState, coord: SquareCoord, by: Color): boolean {
   return state.pieces
     .filter((piece) => piece.color === by)
-    .some((piece) => pseudoMovesForPiece(state, piece, true).some((move) => sameCoord(move, coord)));
+    .some((piece) =>
+      pseudoMovesForPiece(state, piece, true).some((move) => sameCoord(move, coord)),
+    );
 }
 
 function kingCoord(state: ChessState, color: Color): SquareCoord | undefined {
@@ -279,6 +352,7 @@ export function isInCheck(state: ChessState, color: Color): boolean {
 function castleTargets(state: ChessState, king: ChessPiece): SquareCoord[] {
   const from = coordOf(state, king);
   if (!from || king.kind !== "king") return [];
+
   const y = king.color === "white" ? 7 : 0;
   if (from.x !== 4 || from.y !== y || isInCheck(state, king.color)) return [];
 
@@ -299,8 +373,11 @@ function castleTargets(state: ChessState, king: ChessPiece): SquareCoord[] {
       isEmpty(state, { x: 6, y }) &&
       !isSquareAttacked(state, { x: 5, y }, enemy) &&
       !isSquareAttacked(state, { x: 6, y }, enemy)
-    ) results.push({ x: 6, y });
+    ) {
+      results.push({ x: 6, y });
+    }
   }
+
   if (rights[1]) {
     const rook = pieceAt(state, { x: 0, y });
     if (
@@ -311,7 +388,9 @@ function castleTargets(state: ChessState, king: ChessPiece): SquareCoord[] {
       isEmpty(state, { x: 3, y }) &&
       !isSquareAttacked(state, { x: 3, y }, enemy) &&
       !isSquareAttacked(state, { x: 2, y }, enemy)
-    ) results.push({ x: 2, y });
+    ) {
+      results.push({ x: 2, y });
+    }
   }
 
   return results;
@@ -334,14 +413,18 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
     move.from.x !== move.to.x
   ) {
     const captureCoord = { x: move.to.x, y: move.from.y };
-    captured = pieceAt(state, captureCoord);
+    const adjacent = pieceAt(state, captureCoord);
+    if (adjacent?.kind !== "pawn" || adjacent.color === piece.color) return undefined;
+    captured = adjacent;
   }
 
   if (captured) {
+    if (captured.color === piece.color || captured.kind === "king") return undefined;
+
     const removed = removeEntity(placement, captured.id);
     if (removed.kind !== "removed") return undefined;
     placement = removed.state;
-    pieces = pieces.filter((entry) => entry.id !== captured?.id);
+    pieces = pieces.filter((entry) => entry.id !== captured.id);
   }
 
   const relocated = relocateEntity(placement, topology, piece.id, [squareLocationId(move.to)]);
@@ -354,7 +437,8 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
     const rookFrom = move.to.x === 6 ? { x: 7, y } : { x: 0, y };
     const rookTo = move.to.x === 6 ? { x: 5, y } : { x: 3, y };
     const rook = pieceAt({ ...state, pieces, placement }, rookFrom);
-    if (!rook) return undefined;
+    if (!rook || rook.kind !== "rook" || rook.color !== piece.color) return undefined;
+
     const rookMoved = relocateEntity(placement, topology, rook.id, [squareLocationId(rookTo)]);
     if (rookMoved.kind !== "relocated") return undefined;
     placement = rookMoved.state;
@@ -363,10 +447,13 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
   const promotionRank = piece.color === "white" ? 0 : 7;
   if (piece.kind === "pawn" && move.to.y === promotionRank) {
     const promotion = move.promotion ?? "queen";
-    pieces = pieces.map((entry) => entry.id === piece.id ? { ...entry, kind: promotion } : entry);
+    pieces = pieces.map((entry) =>
+      entry.id === piece.id ? { ...entry, kind: promotion } : entry,
+    );
   }
 
   let castling = { ...state.castling };
+
   if (piece.kind === "king") {
     if (piece.color === "white") {
       castling = { ...castling, whiteKingSide: false, whiteQueenSide: false };
@@ -374,6 +461,7 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
       castling = { ...castling, blackKingSide: false, blackQueenSide: false };
     }
   }
+
   if (piece.kind === "rook") {
     if (piece.color === "white" && move.from.y === 7) {
       if (move.from.x === 0) castling = { ...castling, whiteQueenSide: false };
@@ -384,13 +472,16 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
       if (move.from.x === 7) castling = { ...castling, blackKingSide: false };
     }
   }
+
   if (captured?.kind === "rook") {
     const capturedCoord = coordOf(state, captured);
-    if (capturedCoord?.y === 7) {
+
+    if (captured.color === "white" && capturedCoord?.y === 7) {
       if (capturedCoord.x === 0) castling = { ...castling, whiteQueenSide: false };
       if (capturedCoord.x === 7) castling = { ...castling, whiteKingSide: false };
     }
-    if (capturedCoord?.y === 0) {
+
+    if (captured.color === "black" && capturedCoord?.y === 0) {
       if (capturedCoord.x === 0) castling = { ...castling, blackQueenSide: false };
       if (capturedCoord.x === 7) castling = { ...castling, blackKingSide: false };
     }
@@ -402,6 +493,7 @@ function applyUnchecked(state: ChessState, move: ChessMove): ChessState | undefi
       : undefined;
 
   const pawnOrCapture = piece.kind === "pawn" || captured !== undefined;
+
   return {
     pieces,
     placement,
@@ -422,6 +514,7 @@ export function legalMovesFrom(state: ChessState, from: SquareCoord): readonly C
       piece.kind === "pawn" && (to.y === 0 || to.y === 7)
         ? ["queen", "rook", "bishop", "knight"]
         : [];
+
     const candidates: ChessMove[] =
       promotions.length > 0
         ? promotions.map((promotion) => ({ from, to, promotion }))
@@ -449,12 +542,14 @@ export function applyMove(state: ChessState, move: ChessMove): ChessState | unde
       sameCoord(candidate.to, move.to) &&
       (candidate.promotion ?? "queen") === (move.promotion ?? "queen"),
   );
+
   return legal ? applyUnchecked(state, legal) : undefined;
 }
 
 export function gameStatus(state: ChessState): GameStatus {
   const moves = allLegalMoves(state);
   const check = isInCheck(state, state.turn);
+
   if (moves.length > 0) return { kind: "active", turn: state.turn, check };
   if (check) return { kind: "checkmate", winner: other(state.turn) };
   return { kind: "stalemate", turn: state.turn };
@@ -472,6 +567,7 @@ export function serializeChess(state: ChessState): string {
       return { id: piece.id, color: piece.color, kind: piece.kind, coord };
     })
     .sort((a, b) => String(a.id).localeCompare(String(b.id)));
+
   return JSON.stringify({
     pieces,
     turn: state.turn,
