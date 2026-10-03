@@ -185,9 +185,12 @@ export function chooseAiMove(state: ChessState, difficulty: AiDifficulty): Chess
   const moves = sortedMoves(state);
   if (moves.length === 0) return undefined;
 
+  const firstMove = moves[0];
+  if (!firstMove) return undefined;
+
   const perspective = state.turn;
   const budget: SearchBudget = { nodes: 0, cap: config.nodeCap };
-  let bestMove = moves[0];
+  let bestMove = firstMove;
   let bestScore = Number.NEGATIVE_INFINITY;
 
   for (const move of moves) {
