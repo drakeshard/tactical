@@ -24,8 +24,9 @@
     "chess:build": "tsc -p examples/chess/tsconfig.json",
     "chess:preview": "pnpm chess:build && node scripts/preview-chess.mjs",
     "build": "tsc && pnpm chess:build",
-    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm check:build && pnpm check:public-api-readiness && pnpm performance:pressure",
-    "performance:pressure": "node scripts/performance-pressure.mjs"
+    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm check:build && pnpm check:public-api-readiness && pnpm check:package-consumer && pnpm performance:pressure",
+    "performance:pressure": "node scripts/performance-pressure.mjs",
+    "check:package-consumer": "node scripts/check-package-consumer.mjs"
   },
   "keywords": [
     "game-development",
@@ -50,5 +51,55 @@
     "typescript": "7.0.2",
     "vitest": "5.0.2"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "exports": {
+    "./identity": {
+      "types": "./dist/core/identity.d.ts",
+      "import": "./dist/core/identity.js"
+    },
+    "./topology": {
+      "types": "./dist/space/topology.d.ts",
+      "import": "./dist/space/topology.js"
+    },
+    "./square": {
+      "types": "./dist/square/topology.d.ts",
+      "import": "./dist/square/topology.js"
+    },
+    "./square-queries": {
+      "types": "./dist/square/queries.d.ts",
+      "import": "./dist/square/queries.js"
+    },
+    "./placement": {
+      "types": "./dist/placement/placement.d.ts",
+      "import": "./dist/placement/placement.js"
+    },
+    "./traversal": {
+      "types": "./dist/traversal/traversal.d.ts",
+      "import": "./dist/traversal/traversal.js"
+    },
+    "./reachability": {
+      "types": "./dist/movement/reachability.d.ts",
+      "import": "./dist/movement/reachability.js"
+    },
+    "./pathfinding": {
+      "types": "./dist/movement/pathfinding.d.ts",
+      "import": "./dist/movement/pathfinding.js"
+    },
+    "./elevation": {
+      "types": "./dist/elevation/elevation.d.ts",
+      "import": "./dist/elevation/elevation.js"
+    },
+    "./square-visibility": {
+      "types": "./dist/visibility/square-los.d.ts",
+      "import": "./dist/visibility/square-los.js"
+    },
+    "./square-cover": {
+      "types": "./dist/cover/square-cover.d.ts",
+      "import": "./dist/cover/square-cover.js"
+    },
+    "./displacement": {
+      "types": "./dist/displacement/displacement.d.ts",
+      "import": "./dist/displacement/displacement.js"
+    }
+  }
 }
