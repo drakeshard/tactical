@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="A playable Drakeshard Tactical chess integration specimen." />
-    <title>Drakeshard Tactical — Chess Pressure Test</title>
+    <title>Drakeshard Tactical — Chess</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -14,102 +14,114 @@
           <div class="brand-mark" aria-hidden="true">D</div>
           <div>
             <p class="brand-kicker">Drakeshard Tactical</p>
-            <h1>Chess pressure test</h1>
+            <h1>Chess</h1>
           </div>
         </div>
-        <div class="topbar-badge">
-          <span class="badge-dot" aria-hidden="true"></span>
-          Live integration specimen
-        </div>
+        <button id="new-game-top" class="ghost-button" type="button">New game</button>
       </header>
 
-      <main>
-        <section class="intro">
-          <p>
-            A playable consumer-shaped test: Tactical owns identity, square topology,
-            placement/occupancy, and structural line facts; chess rules remain game-owned.
-          </p>
-        </section>
-
-        <section class="game-layout">
-          <div class="board-stage">
-            <div class="player-strip player-strip-black">
+      <main class="game-layout">
+        <section class="board-stage" aria-label="Chess game">
+          <div id="black-player" class="player-strip">
+            <div class="player-main">
               <div class="player-token" aria-hidden="true">♚</div>
               <div>
-                <span class="player-label">Black</span>
-                <span class="player-subtitle">Opponent side</span>
+                <span id="black-name" class="player-label">Black</span>
+                <span id="black-role" class="player-subtitle">Local player</span>
               </div>
             </div>
-
-            <div class="board-frame">
-              <div id="board" class="board"></div>
-            </div>
-
-            <div class="player-strip player-strip-white">
-              <div class="player-token" aria-hidden="true">♔</div>
-              <div>
-                <span class="player-label">White</span>
-                <span class="player-subtitle">Starting side</span>
-              </div>
-            </div>
+            <time id="black-clock" class="clock" aria-label="Black clock">5:00</time>
           </div>
 
-          <aside class="sidebar">
-            <section class="card status-card" aria-labelledby="status-heading">
-              <div class="card-heading-row">
-                <div>
-                  <p class="card-eyebrow">Game state</p>
-                  <h2 id="status-heading">Current turn</h2>
-                </div>
-                <span id="turn-indicator" class="turn-indicator" aria-hidden="true"></span>
-              </div>
-              <p id="status" class="status-copy">White to move</p>
+          <div class="board-frame">
+            <div id="board" class="board"></div>
+          </div>
 
-              <label class="field" for="promotion">
-                <span>Promotion piece</span>
-                <select id="promotion">
-                  <option value="queen">Queen</option>
-                  <option value="rook">Rook</option>
-                  <option value="bishop">Bishop</option>
-                  <option value="knight">Knight</option>
+          <div id="white-player" class="player-strip">
+            <div class="player-main">
+              <div class="player-token" aria-hidden="true">♔</div>
+              <div>
+                <span id="white-name" class="player-label">White</span>
+                <span id="white-role" class="player-subtitle">Local player</span>
+              </div>
+            </div>
+            <time id="white-clock" class="clock" aria-label="White clock">5:00</time>
+          </div>
+        </section>
+
+        <aside class="sidebar">
+          <section class="status-panel">
+            <div class="status-row">
+              <span id="turn-dot" class="turn-dot" aria-hidden="true"></span>
+              <p id="status" class="status-copy">White to move</p>
+            </div>
+          </section>
+
+          <section class="setup-panel">
+            <div class="panel-title-row">
+              <h2>Game</h2>
+              <span id="mode-summary" class="mode-summary">Local · 5 min</span>
+            </div>
+
+            <label class="field" for="mode">
+              <span>Mode</span>
+              <select id="mode">
+                <option value="local">Local 2-player</option>
+                <option value="ai">Vs AI</option>
+              </select>
+            </label>
+
+            <div id="ai-settings" class="ai-settings" hidden>
+              <label class="field" for="difficulty">
+                <span>AI difficulty</span>
+                <select id="difficulty">
+                  <option value="easy">Easy</option>
+                  <option value="normal" selected>Normal</option>
+                  <option value="hard">Hard</option>
                 </select>
               </label>
 
-              <button id="reset" class="primary-button" type="button">Reset game</button>
-            </section>
+              <label class="field" for="human-side">
+                <span>Your side</span>
+                <select id="human-side">
+                  <option value="white">White</option>
+                  <option value="black">Black</option>
+                </select>
+              </label>
+            </div>
 
-            <section class="card history-card">
-              <div class="card-heading-row">
-                <div>
-                  <p class="card-eyebrow">Session</p>
-                  <h2>Move history</h2>
-                </div>
-                <span id="move-count" class="count-badge">0</span>
-              </div>
-              <ol id="moves" class="moves"></ol>
-            </section>
+            <label class="field" for="time-control">
+              <span>Time control</span>
+              <select id="time-control">
+                <option value="3">3 minutes</option>
+                <option value="5" selected>5 minutes</option>
+                <option value="10">10 minutes</option>
+                <option value="unlimited">Unlimited</option>
+              </select>
+            </label>
 
-            <section class="card evidence-card">
-              <p class="card-eyebrow">Boundary evidence</p>
-              <h2>What this page proves</h2>
-              <dl class="evidence-list">
-                <div>
-                  <dt>Tactical</dt>
-                  <dd>Identity, topology, placement, occupancy, line traces.</dd>
-                </div>
-                <div>
-                  <dt>Chess app</dt>
-                  <dd>Turns, legal moves, captures, check, castling, promotion and draws.</dd>
-                </div>
-              </dl>
-            </section>
-          </aside>
-        </section>
+            <label class="field" for="promotion">
+              <span>Promotion</span>
+              <select id="promotion">
+                <option value="queen">Queen</option>
+                <option value="rook">Rook</option>
+                <option value="bishop">Bishop</option>
+                <option value="knight">Knight</option>
+              </select>
+            </label>
+
+            <button id="new-game" class="primary-button" type="button">Start new game</button>
+          </section>
+
+          <section class="history-panel">
+            <div class="panel-title-row">
+              <h2>Moves</h2>
+              <span id="move-count" class="count-badge">0</span>
+            </div>
+            <ol id="moves" class="moves"></ol>
+          </section>
+        </aside>
       </main>
-
-      <footer>
-        <span>Drakeshard Tactical · deterministic discrete-battlefield integration specimen</span>
-      </footer>
     </div>
 
     <script type="module" src="./dist/examples/chess/src/main.js"></script>
