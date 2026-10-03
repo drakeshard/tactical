@@ -22,6 +22,7 @@ describe("chess Tactical integration sample", () => {
 
   it("detects Fool's Mate as checkmate", () => {
     let state = createInitialState();
+
     for (const move of [
       { from: { x: 5, y: 6 }, to: { x: 5, y: 5 } },
       { from: { x: 4, y: 1 }, to: { x: 4, y: 3 } },
@@ -33,6 +34,7 @@ describe("chess Tactical integration sample", () => {
       if (!next) throw new Error("expected legal fixture move");
       state = next;
     }
+
     expect(isInCheck(state, "white")).toBe(true);
     expect(gameStatus(state)).toEqual({ kind: "checkmate", winner: "black" });
   });
@@ -45,16 +47,25 @@ describe("chess Tactical integration sample", () => {
         { id: "bk", color: "black", kind: "king", coord: { x: 4, y: 0 } },
       ],
       "white",
-      { whiteKingSide: true, whiteQueenSide: false, blackKingSide: false, blackQueenSide: false },
+      {
+        whiteKingSide: true,
+        whiteQueenSide: false,
+        blackKingSide: false,
+        blackQueenSide: false,
+      },
     );
-    const move = legalMovesFrom(state, { x: 4, y: 7 }).find((entry) => entry.to.x === 6 && entry.to.y === 7);
+
+    const move = legalMovesFrom(state, { x: 4, y: 7 }).find(
+      (entry) => entry.to.x === 6 && entry.to.y === 7,
+    );
     expect(move).toBeDefined();
+
     const next = move ? applyMove(state, move) : undefined;
     expect(serializeChess(next ?? state)).toContain('"id":"wr"');
     expect(serializeChess(next ?? state)).toContain('"x":5,"y":7');
   });
 
-  it("supports en passant capture", () => {
+  it("supports en passant capture only when the capturable pawn exists", () => {
     const state = createState(
       [
         { id: "wk", color: "white", kind: "king", coord: { x: 4, y: 7 } },
@@ -66,10 +77,31 @@ describe("chess Tactical integration sample", () => {
       undefined,
       { x: 3, y: 2 },
     );
-    const move = legalMovesFrom(state, { x: 4, y: 3 }).find((entry) => entry.to.x === 3 && entry.to.y === 2);
+
+    const move = legalMovesFrom(state, { x: 4, y: 3 }).find(
+      (entry) => entry.to.x === 3 && entry.to.y === 2,
+    );
     expect(move).toBeDefined();
+
     const next = move ? applyMove(state, move) : undefined;
     expect(next?.pieces.some((piece) => piece.id === "bp")).toBe(false);
+
+    const phantom = createState(
+      [
+        { id: "wk", color: "white", kind: "king", coord: { x: 4, y: 7 } },
+        { id: "wp", color: "white", kind: "pawn", coord: { x: 4, y: 3 } },
+        { id: "bk", color: "black", kind: "king", coord: { x: 4, y: 0 } },
+      ],
+      "white",
+      undefined,
+      { x: 3, y: 2 },
+    );
+
+    expect(
+      legalMovesFrom(phantom, { x: 4, y: 3 }).some(
+        (entry) => entry.to.x === 3 && entry.to.y === 2,
+      ),
+    ).toBe(false);
   });
 
   it("supports deterministic promotion choices", () => {
@@ -78,11 +110,79 @@ describe("chess Tactical integration sample", () => {
       { id: "wp", color: "white", kind: "pawn", coord: { x: 0, y: 1 } },
       { id: "bk", color: "black", kind: "king", coord: { x: 4, y: 0 } },
     ]);
-    const promotions = legalMovesFrom(state, { x: 0, y: 1 }).filter((entry) => entry.to.x === 0 && entry.to.y === 0);
-    expect(promotions.map((entry) => entry.promotion)).toEqual(["queen", "rook", "bishop", "knight"]);
+
+    const promotions = legalMovesFrom(state, { x: 0, y: 1 }).filter(
+      (entry) => entry.to.x === 0 && entry.to.y === 0,
+    );
+    expect(promotions.map((entry) => entry.promotion)).toEqual([
+      "queen",
+      "rook",
+      "bishop",
+      "knight",
+    ]);
+
     const knight = promotions.find((entry) => entry.promotion === "knight");
     const next = knight ? applyMove(state, knight) : undefined;
     expect(next?.pieces.find((piece) => piece.id === "wp")?.kind).toBe("knight");
+  });
+
+  it("does not generate a king capture as a legal move", () => {
+    const state = createState(
+      [
+        { id: "wk", color: "white", kind: "king", coord: { x: 4, y: 7 } },
+        { id: "wq", color: "white", kind: "queen", coord: { x: 4, y: 2 } },
+        { id: "bk", color: "black", kind: "king", coord: { x: 4, y: 0 } },
+      ],
+      "white",
+    );
+
+    expect(
+      legalMovesFrom(state, { x: 4, y: 2 }).some(
+        (move) => move.to.x === 4 && move.to.y === 0,
+      ),
+    ).toBe(false);
+  });
+
+  it("treats squares occupied by a king's own pieces as defended", () => {
+    const state = createState(
+      [
+        { id: "wk", color: "white", kind: "king", coord: { x: 4, y: 7 } },
+        { id: "wp", color: "white", kind: "pawn", coord: { x: 4, y: 6 } },
+        { id: "bk", color: "black", kind: "king", coord: { x: 4, y: 5 } },
+      ],
+      "black",
+    );
+
+    expect(
+      legalMovesFrom(state, { x: 4, y: 5 }).some(
+        (move) => move.to.x === 4 && move.to.y === 6,
+      ),
+    ).toBe(false);
+  });
+
+  it("does not revoke the wrong color's castling rights when a rook is captured", () => {
+    const state = createState(
+      [
+        { id: "wk", color: "white", kind: "king", coord: { x: 4, y: 7 } },
+        { id: "wq", color: "white", kind: "queen", coord: { x: 1, y: 6 } },
+        { id: "br", color: "black", kind: "rook", coord: { x: 0, y: 7 } },
+        { id: "bk", color: "black", kind: "king", coord: { x: 4, y: 0 } },
+      ],
+      "white",
+      {
+        whiteKingSide: false,
+        whiteQueenSide: true,
+        blackKingSide: false,
+        blackQueenSide: false,
+      },
+    );
+
+    const next = applyMove(state, {
+      from: { x: 1, y: 6 },
+      to: { x: 0, y: 7 },
+    });
+
+    expect(next?.castling.whiteQueenSide).toBe(true);
   });
 
   it("detects stalemate", () => {
@@ -94,12 +194,14 @@ describe("chess Tactical integration sample", () => {
       ],
       "black",
     );
+
     expect(gameStatus(state)).toEqual({ kind: "stalemate", turn: "black" });
   });
 
   it("replays identical moves into byte-identical serialized state", () => {
     const run = () => {
       let state = createInitialState();
+
       for (const move of [
         { from: { x: 4, y: 6 }, to: { x: 4, y: 4 } },
         { from: { x: 4, y: 1 }, to: { x: 4, y: 3 } },
@@ -110,8 +212,10 @@ describe("chess Tactical integration sample", () => {
         if (!next) throw new Error("expected deterministic fixture move");
         state = next;
       }
+
       return serializeChess(state);
     };
+
     expect(run()).toBe(run());
   });
 });
