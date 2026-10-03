@@ -27,12 +27,14 @@ The page supports:
 
 - local two-player chess;
 - local deterministic AI with Easy, Normal, and Hard bounded search levels;
+- stronger AI evaluation using material, mobility, center activity, pawn progress, king safety, check pressure, and forcing-move ordering;
 - choosing White or Black against AI;
 - 3-minute, 5-minute, 10-minute, and Unlimited clocks;
 - explicit queen, rook, bishop, or knight promotion preference.
 
 The side to move is highlighted and only that side's clock runs. A finite clock reaching zero ends
-the sample game on time.
+the sample game on time. Checkmate, stalemate, and timeout now open a dedicated result dialog; a
+human victory against AI explicitly congratulates the player and offers immediate replay.
 
 ## Verify
 
@@ -66,4 +68,4 @@ Then open the URL printed by the preview command. By default it is
 
 The sample tests ordinary occupancy blocking, checkmate, castling, en passant validation, promotion,
 king-capture prevention, king-defended squares, castling-right bookkeeping, stalemate,
-byte-identical deterministic replay, deterministic AI choice, and clock behavior.
+byte-identical deterministic replay, deterministic AI choice, mate finding, and clock behavior.

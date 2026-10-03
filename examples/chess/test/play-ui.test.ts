@@ -1,12 +1,30 @@
 import { describe, expect, it } from "vitest";
 import { chooseAiMove } from "../src/ai.js";
-import { createInitialState, createState } from "../src/chess.js";
+import { applyMove, createInitialState, createState, gameStatus } from "../src/chess.js";
 import { createClock, elapseClock, formatClock, hasTimedOut } from "../src/clock.js";
 
 describe("chess sample AI", () => {
   it("is deterministic for the same position and difficulty", () => {
     const state = createInitialState();
-    expect(chooseAiMove(state, "hard")).toEqual(chooseAiMove(state, "hard"));
+    expect(chooseAiMove(state, "normal")).toEqual(chooseAiMove(state, "normal"));
+  });
+
+  it("finds a mate-in-one on hard difficulty", () => {
+    const state = createState([
+      { id: "wk", color: "white", kind: "king", coord: { x: 5, y: 2 } },
+      { id: "wq", color: "white", kind: "queen", coord: { x: 6, y: 2 } },
+      { id: "bk", color: "black", kind: "king", coord: { x: 7, y: 0 } },
+    ]);
+
+    const move = chooseAiMove(state, "hard");
+    expect(move).toBeDefined();
+    if (!move) throw new Error("expected mating move");
+
+    const next = applyMove(state, move);
+    expect(next ? gameStatus(next) : undefined).toEqual({
+      kind: "checkmate",
+      winner: "white",
+    });
   });
 
   it("takes an immediately valuable capture on easy difficulty", () => {
