@@ -61,6 +61,13 @@ const whiteClockElement = requireElement<HTMLTimeElement>("#white-clock");
 const blackClockElement = requireElement<HTMLTimeElement>("#black-clock");
 const whiteRole = requireElement<HTMLSpanElement>("#white-role");
 const blackRole = requireElement<HTMLSpanElement>("#black-role");
+const resultOverlay = requireElement<HTMLDivElement>("#result-overlay");
+const resultIcon = requireElement<HTMLDivElement>("#result-icon");
+const resultKicker = requireElement<HTMLParagraphElement>("#result-kicker");
+const resultTitle = requireElement<HTMLHeadingElement>("#result-title");
+const resultMessage = requireElement<HTMLParagraphElement>("#result-message");
+const playAgain = requireElement<HTMLButtonElement>("#play-again");
+const closeResult = requireElement<HTMLButtonElement>("#close-result");
 
 let state: ChessState = createInitialState();
 let selected: { x: number; y: number } | undefined;
@@ -69,6 +76,7 @@ let lastMove: ChessMove | undefined;
 let clock: ChessClock = createClock("5");
 let timedOut: Color | undefined;
 let aiPending = false;
+let resultDismissed = false;
 let session = 0;
 let lastFrame = performance.now();
 let config: GameConfig = {
@@ -262,6 +270,52 @@ function renderHistory(): void {
   if (last instanceof HTMLElement) last.scrollIntoView({ block: "nearest" });
 }
 
+function renderResult(): void {
+  if (resultDismissed) {
+    resultOverlay.hidden = true;
+    return;
+  }
+
+  const statusValue = gameStatus(state);
+  let winner: Color | undefined;
+  let reason = "";
+
+  if (timedOut) {
+    winner = opposite(timedOut);
+    reason = `${titleCase(timedOut)} ran out of time.`;
+  } else if (statusValue.kind === "checkmate") {
+    winner = statusValue.winner;
+    reason = "Checkmate.";
+  } else if (statusValue.kind === "stalemate") {
+    resultIcon.textContent = "½";
+    resultKicker.textContent = "Draw";
+    resultTitle.textContent = "Stalemate";
+    resultMessage.textContent = "Neither side has a legal move that can continue the game.";
+    resultOverlay.hidden = false;
+    return;
+  } else {
+    resultOverlay.hidden = true;
+    return;
+  }
+
+  const humanWon = config.mode === "ai" && winner === config.humanSide;
+  const aiWon = config.mode === "ai" && winner !== config.humanSide;
+
+  resultIcon.textContent = humanWon ? "🏆" : aiWon ? "♟" : "♛";
+  resultKicker.textContent = humanWon ? "Victory" : aiWon ? "Game over" : "Winner";
+  resultTitle.textContent = humanWon
+    ? "Congratulations — you win!"
+    : aiWon
+      ? "The AI wins"
+      : `${titleCase(winner)} wins`;
+  resultMessage.textContent = humanWon
+    ? `${reason} Nice game — you beat ${config.difficulty} AI.`
+    : aiWon
+      ? `${reason} Try again or adjust the difficulty.`
+      : reason;
+  resultOverlay.hidden = false;
+}
+
 function render(): void {
   status.textContent = currentStatus();
   turnDot.classList.toggle("black", state.turn === "black");
@@ -269,6 +323,7 @@ function render(): void {
   renderClocks();
   renderBoard();
   renderHistory();
+  renderResult();
 }
 
 function scheduleAiIfNeeded(): void {
@@ -321,6 +376,8 @@ function startNewGame(): void {
   clock = createClock(config.timeControl);
   timedOut = undefined;
   aiPending = false;
+  resultDismissed = false;
+  resultOverlay.hidden = true;
   lastFrame = performance.now();
   modeSummary.textContent = configSummary(config);
   render();
@@ -350,6 +407,12 @@ function tick(now: number): void {
 mode.addEventListener("change", updateSetupVisibility);
 newGame.addEventListener("click", startNewGame);
 newGameTop.addEventListener("click", startNewGame);
+playAgain.addEventListener("click", startNewGame);
+closeResult.addEventListener("click", () => {
+  resultDismissed = true;
+  resultOverlay.hidden = true;
+  mode.focus();
+});
 
 updateSetupVisibility();
 startNewGame();
