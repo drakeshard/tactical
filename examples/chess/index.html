@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Drakeshard Tactical — Chess Pressure Test</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Drakeshard Tactical integration specimen</p>
+      <h1>Chess pressure test</h1>
+      <p>Chess rules stay game-owned while Tactical supplies identity, square topology, placement, occupancy, and structural line facts.</p>
+    </section>
+    <section class="layout">
+      <div id="board" class="board"></div>
+      <aside>
+        <div class="panel">
+          <h2 id="status">White to move</h2>
+          <button id="reset" type="button">Reset</button>
+        </div>
+        <div class="panel">
+          <h3>Move log</h3>
+          <ol id="moves" class="moves"></ol>
+        </div>
+        <div class="panel small">
+          <strong>Boundary:</strong> chess owns turns, legal moves, capture, check, mate, castling, en passant, promotion and draws.
+        </div>
+      </aside>
+    </section>
+  </main>
+  <script type="module" src="./dist/examples/chess/src/main.js"></script>
+</body>
+</html>
