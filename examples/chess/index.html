@@ -3,46 +3,115 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A playable Drakeshard Tactical chess integration specimen." />
     <title>Drakeshard Tactical — Chess Pressure Test</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main>
-      <section class="hero">
-        <p class="eyebrow">Drakeshard Tactical integration specimen</p>
-        <h1>Chess pressure test</h1>
-        <p>
-          Chess rules stay game-owned while Tactical supplies identity, square topology, placement,
-          occupancy, and structural line facts.
-        </p>
-      </section>
-      <section class="layout">
-        <div id="board" class="board"></div>
-        <aside class="sidebar">
-          <div class="panel">
-            <h2 id="status">White to move</h2>
-            <label class="promotion-control" for="promotion">
-              Promotion
-              <select id="promotion">
-                <option value="queen">Queen</option>
-                <option value="rook">Rook</option>
-                <option value="bishop">Bishop</option>
-                <option value="knight">Knight</option>
-              </select>
-            </label>
-            <button id="reset" type="button">Reset</button>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">D</div>
+          <div>
+            <p class="brand-kicker">Drakeshard Tactical</p>
+            <h1>Chess pressure test</h1>
           </div>
-          <div class="panel">
-            <h3>Move log</h3>
-            <ol id="moves" class="moves"></ol>
+        </div>
+        <div class="topbar-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          Live integration specimen
+        </div>
+      </header>
+
+      <main>
+        <section class="intro">
+          <p>
+            A playable consumer-shaped test: Tactical owns identity, square topology,
+            placement/occupancy, and structural line facts; chess rules remain game-owned.
+          </p>
+        </section>
+
+        <section class="game-layout">
+          <div class="board-stage">
+            <div class="player-strip player-strip-black">
+              <div class="player-token" aria-hidden="true">♚</div>
+              <div>
+                <span class="player-label">Black</span>
+                <span class="player-subtitle">Opponent side</span>
+              </div>
+            </div>
+
+            <div class="board-frame">
+              <div id="board" class="board" aria-label="Chess board"></div>
+            </div>
+
+            <div class="player-strip player-strip-white">
+              <div class="player-token" aria-hidden="true">♔</div>
+              <div>
+                <span class="player-label">White</span>
+                <span class="player-subtitle">Starting side</span>
+              </div>
+            </div>
           </div>
-          <div class="panel small boundary-panel">
-            <strong>Boundary:</strong> chess owns turns, legal moves, capture, check, mate, castling,
-            en passant, promotion and draws.
-          </div>
-        </aside>
-      </section>
-    </main>
+
+          <aside class="sidebar">
+            <section class="card status-card" aria-labelledby="status-heading">
+              <div class="card-heading-row">
+                <div>
+                  <p class="card-eyebrow">Game state</p>
+                  <h2 id="status-heading">Current turn</h2>
+                </div>
+                <span id="turn-indicator" class="turn-indicator" aria-hidden="true"></span>
+              </div>
+              <p id="status" class="status-copy">White to move</p>
+
+              <label class="field" for="promotion">
+                <span>Promotion piece</span>
+                <select id="promotion">
+                  <option value="queen">Queen</option>
+                  <option value="rook">Rook</option>
+                  <option value="bishop">Bishop</option>
+                  <option value="knight">Knight</option>
+                </select>
+              </label>
+
+              <button id="reset" class="primary-button" type="button">Reset game</button>
+            </section>
+
+            <section class="card history-card">
+              <div class="card-heading-row">
+                <div>
+                  <p class="card-eyebrow">Session</p>
+                  <h2>Move history</h2>
+                </div>
+                <span id="move-count" class="count-badge">0</span>
+              </div>
+              <ol id="moves" class="moves"></ol>
+            </section>
+
+            <section class="card evidence-card">
+              <p class="card-eyebrow">Boundary evidence</p>
+              <h2>What this page proves</h2>
+              <dl class="evidence-list">
+                <div>
+                  <dt>Tactical</dt>
+                  <dd>Identity, topology, placement, occupancy, line traces.</dd>
+                </div>
+                <div>
+                  <dt>Chess app</dt>
+                  <dd>Turns, legal moves, captures, check, castling, promotion and draws.</dd>
+                </div>
+              </dl>
+            </section>
+          </aside>
+        </section>
+      </main>
+
+      <footer>
+        <span>Drakeshard Tactical · deterministic discrete-battlefield integration specimen</span>
+      </footer>
+    </div>
+
     <script type="module" src="./dist/examples/chess/src/main.js"></script>
   </body>
 </html>
