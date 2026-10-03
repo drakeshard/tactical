@@ -16,11 +16,17 @@ const glyphs: Readonly<Record<Color, Readonly<Record<PieceKind, string>>>> = {
   black: { king: "♚", queen: "♛", rook: "♜", bishop: "♝", knight: "♞", pawn: "♟" },
 };
 
-const board = document.querySelector<HTMLDivElement>("#board");
-const status = document.querySelector<HTMLHeadingElement>("#status");
-const reset = document.querySelector<HTMLButtonElement>("#reset");
-const moves = document.querySelector<HTMLOListElement>("#moves");
-if (!board || !status || !reset || !moves) throw new Error("Chess UI mount missing");
+const boardElement = document.querySelector<HTMLDivElement>("#board");
+const statusElement = document.querySelector<HTMLHeadingElement>("#status");
+const resetElement = document.querySelector<HTMLButtonElement>("#reset");
+const movesElement = document.querySelector<HTMLOListElement>("#moves");
+if (!boardElement || !statusElement || !resetElement || !movesElement) {
+  throw new Error("Chess UI mount missing");
+}
+const board = boardElement;
+const status = statusElement;
+const reset = resetElement;
+const moves = movesElement;
 
 let state: ChessState = createInitialState();
 let selected: { x: number; y: number } | undefined;
