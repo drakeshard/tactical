@@ -1,6 +1,6 @@
 # Chess — Tactical integration pressure test
 
-Public test page: https://drakeshard.github.io/tactical/\n\nThis browser sample pressure-tests the repository-local Tactical incubation contracts against chess,
+Public test page target: https://drakeshard.github.io/tactical/\n\nDeployment workflow is installed, but the repository's GitHub Pages source must first be enabled as **GitHub Actions** in repository Settings → Pages. Until that one-time repository setting is enabled, the URL will not resolve.\n\nThis browser sample pressure-tests the repository-local Tactical incubation contracts against chess,
 a materially different discrete-board consumer.
 
 ## What the sample exercises from Tactical
