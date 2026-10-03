@@ -6,7 +6,7 @@ import { createClock, elapseClock, formatClock, hasTimedOut } from "../src/clock
 describe("chess sample AI", () => {
   it("is deterministic for the same position and difficulty", () => {
     const state = createInitialState();
-    expect(chooseAiMove(state, "hard")).toEqual(chooseAiMove(state, "hard"));
+    expect(chooseAiMove(state, "normal")).toEqual(chooseAiMove(state, "normal"));
   });
 
   it("finds a mate-in-one on hard difficulty", () => {
